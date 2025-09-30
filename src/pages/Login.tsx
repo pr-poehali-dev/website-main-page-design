@@ -11,7 +11,8 @@ const Login = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Login attempt:', { name, password });
+    // Симуляция успешного входа
+    window.location.href = '/dashboard';
   };
 
   return (
