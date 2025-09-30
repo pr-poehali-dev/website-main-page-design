@@ -1,16 +1,24 @@
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Switch } from '@/components/ui/switch';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
 import Icon from '@/components/ui/icon';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { fetchWithAuth } from '@/utils/api';
 import SettingsNav from '@/components/SettingsNav';
+import AccountSection from '@/components/settings/AccountSection';
+import PasswordSection from '@/components/settings/PasswordSection';
+import AuthSection from '@/components/settings/AuthSection';
+import DomainSection from '@/components/settings/DomainSection';
+import ImageSection from '@/components/settings/ImageSection';
+import {
+  TelegramSection,
+  MailSection,
+  RedirectSection,
+  SitemapSection,
+  PanelSection,
+  LinkedAccountsSection,
+  SapeSection,
+  DeleteSection
+} from '@/components/settings/MiscSections';
 
 const API_URL = 'https://functions.poehali.dev/9f11f70c-7220-45b8-849f-375ef1e6c2e4';
 
@@ -539,648 +547,160 @@ const GeneralSettings = () => {
           </div>
         )}
 
-        <Card className="mb-6">
-          <CardHeader 
-            className="cursor-pointer flex flex-row items-center justify-between"
-            onClick={() => toggleSection('account')}
-          >
-            <CardTitle className="flex items-center gap-2">
-              <Icon name={collapsedSections.account ? "ChevronRight" : "ChevronDown"} size={20} />
-              Настройки аккаунта
-            </CardTitle>
-          </CardHeader>
-          {!collapsedSections.account && (
-            <CardContent className="space-y-4">
-              <div>
-                <Label>Логин</Label>
-                <p className="text-gray-600 mt-1">{user?.login || 'N/A'}</p>
-              </div>
-              <div>
-                <Label htmlFor="email">E-mail</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="example@mail.com"
-                />
-              </div>
-              <div>
-                <Label htmlFor="phone">Телефон моб.</Label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  value={phone}
-                  disabled={phoneVerified}
-                  placeholder="+70000000000"
-                />
-                {phoneVerified && (
-                  <p className="text-green-600 text-sm mt-1">✓ номер подтвержден</p>
-                )}
-              </div>
-              <Button onClick={saveAccountSettings} disabled={loading}>
-                {loading ? 'Сохранение...' : 'Сохранить'}
-              </Button>
-            </CardContent>
-          )}
-        </Card>
+        <AccountSection
+          email={email}
+          setEmail={setEmail}
+          phone={phone}
+          phoneVerified={phoneVerified}
+          userLogin={user?.login}
+          loading={loading}
+          collapsed={collapsedSections.account}
+          onToggle={() => toggleSection('account')}
+          onSave={saveAccountSettings}
+        />
 
-        <Card className="mb-6">
-          <CardHeader 
-            className="cursor-pointer flex flex-row items-center justify-between"
-            onClick={() => toggleSection('password')}
-          >
-            <CardTitle className="flex items-center gap-2">
-              <Icon name={collapsedSections.password ? "ChevronRight" : "ChevronDown"} size={20} />
-              Смена пароля
-            </CardTitle>
-          </CardHeader>
-          {!collapsedSections.password && (
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="newPassword">Новый пароль</Label>
-                <Input
-                  id="newPassword"
-                  type="password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                />
-              </div>
-              <div>
-                <Label htmlFor="confirmPassword">Пароль еще раз</Label>
-                <Input
-                  id="confirmPassword"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-              </div>
-              <div>
-                <Label htmlFor="oldPassword">Старый пароль</Label>
-                <Input
-                  id="oldPassword"
-                  type="password"
-                  value={oldPassword}
-                  onChange={(e) => setOldPassword(e.target.value)}
-                />
-              </div>
-              <Button onClick={changePassword} disabled={loading}>
-                {loading ? 'Сохранение...' : 'Сохранить'}
-              </Button>
-            </CardContent>
-          )}
-        </Card>
+        <PasswordSection
+          newPassword={newPassword}
+          setNewPassword={setNewPassword}
+          confirmPassword={confirmPassword}
+          setConfirmPassword={setConfirmPassword}
+          oldPassword={oldPassword}
+          setOldPassword={setOldPassword}
+          loading={loading}
+          collapsed={collapsedSections.password}
+          onToggle={() => toggleSection('password')}
+          onSave={changePassword}
+        />
 
-        <Card className="mb-6">
-          <CardHeader 
-            className="cursor-pointer flex flex-row items-center justify-between"
-            onClick={() => toggleSection('auth')}
-          >
-            <CardTitle className="flex items-center gap-2">
-              <Icon name={collapsedSections.auth ? "ChevronRight" : "ChevronDown"} size={20} />
-              Двухэтапная авторизация
-            </CardTitle>
-          </CardHeader>
-          {!collapsedSections.auth && (
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="authMethod">Основной метод</Label>
-                <Select value={authMethod} onValueChange={setAuthMethod}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="0">Отключен</SelectItem>
-                    <SelectItem value="1">Код по SMS</SelectItem>
-                    <SelectItem value="2">Код на емейл</SelectItem>
-                    <SelectItem value="3">Код в Telegram</SelectItem>
-                    <SelectItem value="4">Google Authenticator</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label>Методы авторизации</Label>
-                <div className="space-y-2 mt-2">
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      checked={authMethods.includes('1')}
-                      onCheckedChange={(checked) => handleAuthMethodToggle('1', checked)}
-                    />
-                    <Label>Код по SMS</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      checked={authMethods.includes('2')}
-                      onCheckedChange={(checked) => handleAuthMethodToggle('2', checked)}
-                    />
-                    <Label>Код на емейл</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      checked={authMethods.includes('3')}
-                      onCheckedChange={(checked) => handleAuthMethodToggle('3', checked)}
-                    />
-                    <Label>Код в Telegram</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      checked={authMethods.includes('4')}
-                      onCheckedChange={(checked) => handleAuthMethodToggle('4', checked)}
-                    />
-                    <Label>Google Authenticator</Label>
-                  </div>
-                </div>
-              </div>
-              <Button onClick={saveAuthSettings} disabled={loading}>
-                {loading ? 'Сохранение...' : 'Сохранить'}
-              </Button>
-            </CardContent>
-          )}
-        </Card>
+        <AuthSection
+          authMethod={authMethod}
+          setAuthMethod={setAuthMethod}
+          authMethods={authMethods}
+          onAuthMethodToggle={handleAuthMethodToggle}
+          loading={loading}
+          collapsed={collapsedSections.auth}
+          onToggle={() => toggleSection('auth')}
+          onSave={saveAuthSettings}
+        />
 
-        <Card className="mb-6">
-          <CardHeader 
-            className="cursor-pointer flex flex-row items-center justify-between"
-            onClick={() => toggleSection('telegram')}
-          >
-            <CardTitle className="flex items-center gap-2">
-              <Icon name={collapsedSections.telegram ? "ChevronRight" : "ChevronDown"} size={20} />
-              Привязать телеграм-аккаунт
-            </CardTitle>
-          </CardHeader>
-          {!collapsedSections.telegram && (
-            <CardContent>
-              <div>
-                <Label>Аккаунт в Telegram</Label>
-                {telegramConnected ? (
-                  <div className="mt-2">
-                    <p className="text-gray-700">
-                      {telegramAccount}{' '}
-                      <button
-                        onClick={disconnectTelegram}
-                        className="text-blue-600 hover:underline"
-                      >
-                        отвязать
-                      </button>
-                    </p>
-                  </div>
-                ) : (
-                  <p className="text-gray-600 mt-2">Аккаунт не привязан</p>
-                )}
-              </div>
-            </CardContent>
-          )}
-        </Card>
+        <TelegramSection
+          telegramAccount={telegramAccount}
+          telegramConnected={telegramConnected}
+          onDisconnect={disconnectTelegram}
+          loading={loading}
+          collapsed={collapsedSections.telegram}
+          onToggle={() => toggleSection('telegram')}
+        />
 
-        <Card className="mb-6">
-          <CardHeader 
-            className="cursor-pointer flex flex-row items-center justify-between"
-            onClick={() => toggleSection('domain')}
-          >
-            <CardTitle className="flex items-center gap-2">
-              <Icon name={collapsedSections.domain ? "ChevronRight" : "ChevronDown"} size={20} />
-              Отдельный домен
-            </CardTitle>
-          </CardHeader>
-          {!collapsedSections.domain && (
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="domain">Отдельный домен</Label>
-                <Input
-                  id="domain"
-                  value={domain}
-                  onChange={(e) => setDomain(e.target.value)}
-                  placeholder="example.com"
-                />
-                {domainConnected && (
-                  <p className="text-green-600 text-sm mt-1">✓ подключен</p>
-                )}
-              </div>
-              <div>
-                <Label>DNS-записи</Label>
-                <div className="space-y-2 mt-2">
-                  {dnsRecords.map((record, index) => (
-                    <div key={index} className="flex gap-2 items-center">
-                      <Input
-                        placeholder="Название"
-                        value={record.name}
-                        onChange={(e) => updateDnsRecord(index, 'name', e.target.value)}
-                        className="w-32"
-                      />
-                      <Input
-                        placeholder="Значение"
-                        value={record.value}
-                        onChange={(e) => updateDnsRecord(index, 'value', e.target.value)}
-                        className="flex-1"
-                      />
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => removeDnsRecord(index)}
-                      >
-                        ✕
-                      </Button>
-                    </div>
-                  ))}
-                  <Button variant="outline" size="sm" onClick={addDnsRecord}>
-                    Добавить запись
-                  </Button>
-                </div>
-              </div>
-              <Button onClick={saveDomainSettings} disabled={loading}>
-                {loading ? 'Сохранение...' : 'Сохранить'}
-              </Button>
-            </CardContent>
-          )}
-        </Card>
+        <DomainSection
+          domain={domain}
+          setDomain={setDomain}
+          domainConnected={domainConnected}
+          dnsRecords={dnsRecords}
+          onAddDnsRecord={addDnsRecord}
+          onRemoveDnsRecord={removeDnsRecord}
+          onUpdateDnsRecord={updateDnsRecord}
+          loading={loading}
+          collapsed={collapsedSections.domain}
+          onToggle={() => toggleSection('domain')}
+          onSave={saveDomainSettings}
+        />
 
-        <Card className="mb-6">
-          <CardHeader 
-            className="cursor-pointer flex flex-row items-center justify-between"
-            onClick={() => toggleSection('mail')}
-          >
-            <CardTitle className="flex items-center gap-2">
-              <Icon name={collapsedSections.mail ? "ChevronRight" : "ChevronDown"} size={20} />
-              Почта на домене
-            </CardTitle>
-          </CardHeader>
-          {!collapsedSections.mail && (
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="mailSystem">Почтовая служба</Label>
-                <Select value={mailSystem} onValueChange={setMailSystem}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="0">Не подключена</SelectItem>
-                    <SelectItem value="4">Яндекс 360</SelectItem>
-                    <SelectItem value="1">Zoho Mail</SelectItem>
-                    <SelectItem value="2">VK WorkMail</SelectItem>
-                    <SelectItem value="3">Google Workspace</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <Button onClick={saveMailSettings} disabled={loading}>
-                {loading ? 'Сохранение...' : 'Сохранить'}
-              </Button>
-            </CardContent>
-          )}
-        </Card>
+        <MailSection
+          mailSystem={mailSystem}
+          setMailSystem={setMailSystem}
+          loading={loading}
+          collapsed={collapsedSections.mail}
+          onToggle={() => toggleSection('mail')}
+          onSave={saveMailSettings}
+        />
 
-        <Card className="mb-6">
-          <CardHeader 
-            className="cursor-pointer flex flex-row items-center justify-between"
-            onClick={() => toggleSection('redirect')}
-          >
-            <CardTitle className="flex items-center gap-2">
-              <Icon name={collapsedSections.redirect ? "ChevronRight" : "ChevronDown"} size={20} />
-              Переадресация (redirect)
-            </CardTitle>
-          </CardHeader>
-          {!collapsedSections.redirect && (
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="redirectDomains">Переадресация доменов</Label>
-                <Textarea
-                  id="redirectDomains"
-                  value={redirectDomains}
-                  onChange={(e) => setRedirectDomains(e.target.value)}
-                  placeholder="domain1 domain2&#10;domain3 domain4"
-                  rows={4}
-                />
-                <p className="text-sm text-gray-600 mt-1">
-                  Формат: domain1 domain2 (каждая пара на новой строке)
-                </p>
-              </div>
-              <div>
-                <Label htmlFor="redirectPages">Переадресация страниц</Label>
-                <Textarea
-                  id="redirectPages"
-                  value={redirectPages}
-                  onChange={(e) => setRedirectPages(e.target.value)}
-                  placeholder="URL1 URL2&#10;URL3 URL4"
-                  rows={4}
-                />
-                <p className="text-sm text-gray-600 mt-1">
-                  Формат: URL1 URL2 (каждая пара на новой строке)
-                </p>
-              </div>
-              <Button onClick={saveRedirectSettings} disabled={loading}>
-                {loading ? 'Сохранение...' : 'Сохранить'}
-              </Button>
-            </CardContent>
-          )}
-        </Card>
+        <RedirectSection
+          redirectDomains={redirectDomains}
+          setRedirectDomains={setRedirectDomains}
+          redirectPages={redirectPages}
+          setRedirectPages={setRedirectPages}
+          loading={loading}
+          collapsed={collapsedSections.redirect}
+          onToggle={() => toggleSection('redirect')}
+          onSave={saveRedirectSettings}
+        />
 
-        <Card className="mb-6">
-          <CardHeader 
-            className="cursor-pointer flex flex-row items-center justify-between"
-            onClick={() => toggleSection('sitemap')}
-          >
-            <CardTitle className="flex items-center gap-2">
-              <Icon name={collapsedSections.sitemap ? "ChevronRight" : "ChevronDown"} size={20} />
-              Файл SITEMAP
-            </CardTitle>
-          </CardHeader>
-          {!collapsedSections.sitemap && (
-            <CardContent className="space-y-4">
-              <div className="flex items-center space-x-2">
-                <Switch
-                  checked={sitemapEnabled}
-                  onCheckedChange={setSitemapEnabled}
-                />
-                <Label>Создавать файл sitemap</Label>
-              </div>
-              {sitemapEnabled && sitemapUrl && (
-                <div>
-                  <Label>Адрес файла SITEMAP</Label>
-                  <p className="text-gray-700 mt-1">
-                    {sitemapUrl}{' '}
-                    <button
-                      onClick={refreshSitemap}
-                      className="text-blue-600 hover:underline"
-                    >
-                      обновить файл
-                    </button>
-                  </p>
-                  <p className="text-sm text-gray-600 mt-1">
-                    Файл обновляется автоматически один раз в сутки
-                  </p>
-                </div>
-              )}
-              <Button onClick={saveSitemapSettings} disabled={loading}>
-                {loading ? 'Сохранение...' : 'Сохранить'}
-              </Button>
-            </CardContent>
-          )}
-        </Card>
+        <SitemapSection
+          sitemapEnabled={sitemapEnabled}
+          setSitemapEnabled={setSitemapEnabled}
+          sitemapUrl={sitemapUrl}
+          onRefreshSitemap={refreshSitemap}
+          loading={loading}
+          collapsed={collapsedSections.sitemap}
+          onToggle={() => toggleSection('sitemap')}
+          onSave={saveSitemapSettings}
+        />
 
-        <Card className="mb-6">
-          <CardHeader 
-            className="cursor-pointer flex flex-row items-center justify-between"
-            onClick={() => toggleSection('image')}
-          >
-            <CardTitle className="flex items-center gap-2">
-              <Icon name={collapsedSections.image ? "ChevronRight" : "ChevronDown"} size={20} />
-              Качество изображений и водяной знак
-            </CardTitle>
-          </CardHeader>
-          {!collapsedSections.image && (
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="watermarkPosition">Водяной знак</Label>
-                <Select value={watermarkPosition} onValueChange={setWatermarkPosition}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="0">Нет</SelectItem>
-                    <SelectItem value="1">В левом верхнем углу</SelectItem>
-                    <SelectItem value="2">В правом верхнем углу</SelectItem>
-                    <SelectItem value="3">В левом нижнем углу</SelectItem>
-                    <SelectItem value="4">В правом нижнем углу</SelectItem>
-                    <SelectItem value="9">Слева по центру</SelectItem>
-                    <SelectItem value="8">Справа по центру</SelectItem>
-                    <SelectItem value="5">В центре</SelectItem>
-                    <SelectItem value="6">В центре вверху</SelectItem>
-                    <SelectItem value="7">В центре внизу</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              {watermarkPosition !== '0' && (
-                <>
-                  {watermarkPreview && (
-                    <div>
-                      <Label>Текущий водяной знак</Label>
-                      <img src={watermarkPreview} alt="Watermark" className="mt-2 max-w-xs" />
-                    </div>
-                  )}
-                  <div>
-                    <Label htmlFor="watermarkFile">Файл картинки</Label>
-                    <Input
-                      id="watermarkFile"
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => setWatermarkFile(e.target.files?.[0] || null)}
-                    />
-                  </div>
-                  <div className="flex gap-4">
-                    <div className="flex-1">
-                      <Label htmlFor="watermarkMinWidth">Мин. ширина (px)</Label>
-                      <Input
-                        id="watermarkMinWidth"
-                        type="number"
-                        value={watermarkMinWidth}
-                        onChange={(e) => setWatermarkMinWidth(e.target.value)}
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <Label htmlFor="watermarkMinHeight">Мин. высота (px)</Label>
-                      <Input
-                        id="watermarkMinHeight"
-                        type="number"
-                        value={watermarkMinHeight}
-                        onChange={(e) => setWatermarkMinHeight(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                </>
-              )}
-              <div>
-                <Label htmlFor="imageQuality">Качество (1-100)</Label>
-                <Input
-                  id="imageQuality"
-                  type="number"
-                  min="1"
-                  max="100"
-                  value={imageQuality}
-                  onChange={(e) => setImageQuality(e.target.value)}
-                />
-              </div>
-              <div className="flex items-center space-x-2">
-                <Switch
-                  checked={webpEnabled}
-                  onCheckedChange={setWebpEnabled}
-                />
-                <Label>Формат WebP включен</Label>
-              </div>
-              <Button onClick={saveImageSettings} disabled={loading}>
-                {loading ? 'Сохранение...' : 'Сохранить'}
-              </Button>
-            </CardContent>
-          )}
-        </Card>
+        <ImageSection
+          watermarkPosition={watermarkPosition}
+          setWatermarkPosition={setWatermarkPosition}
+          watermarkPreview={watermarkPreview}
+          watermarkFile={watermarkFile}
+          setWatermarkFile={setWatermarkFile}
+          watermarkMinWidth={watermarkMinWidth}
+          setWatermarkMinWidth={setWatermarkMinWidth}
+          watermarkMinHeight={watermarkMinHeight}
+          setWatermarkMinHeight={setWatermarkMinHeight}
+          imageQuality={imageQuality}
+          setImageQuality={setImageQuality}
+          webpEnabled={webpEnabled}
+          setWebpEnabled={setWebpEnabled}
+          loading={loading}
+          collapsed={collapsedSections.image}
+          onToggle={() => toggleSection('image')}
+          onSave={saveImageSettings}
+        />
 
-        <Card className="mb-6">
-          <CardHeader 
-            className="cursor-pointer flex flex-row items-center justify-between"
-            onClick={() => toggleSection('panel')}
-          >
-            <CardTitle className="flex items-center gap-2">
-              <Icon name={collapsedSections.panel ? "ChevronRight" : "ChevronDown"} size={20} />
-              Настройки панели управления
-            </CardTitle>
-          </CardHeader>
-          {!collapsedSections.panel && (
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="itemsPerPage">Элементов на странице</Label>
-                <Input
-                  id="itemsPerPage"
-                  type="number"
-                  value={itemsPerPage}
-                  onChange={(e) => setItemsPerPage(e.target.value)}
-                />
-              </div>
-              <div>
-                <Label>Уведомления от браузера</Label>
-                <div className="space-y-2 mt-2">
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      checked={notifyOrders}
-                      onCheckedChange={setNotifyOrders}
-                    />
-                    <Label>о новых заказах</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      checked={notifyMessages}
-                      onCheckedChange={setNotifyMessages}
-                    />
-                    <Label>о новых сообщениях</Label>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <Label htmlFor="timezone">Часовой пояс</Label>
-                <Select value={timezone} onValueChange={setTimezone}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Europe/Moscow">Europe/Moscow</SelectItem>
-                    <SelectItem value="Europe/London">Europe/London</SelectItem>
-                    <SelectItem value="America/New_York">America/New_York</SelectItem>
-                    <SelectItem value="Asia/Tokyo">Asia/Tokyo</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <Button onClick={savePanelSettings} disabled={loading}>
-                {loading ? 'Сохранение...' : 'Сохранить'}
-              </Button>
-            </CardContent>
-          )}
-        </Card>
+        <PanelSection
+          itemsPerPage={itemsPerPage}
+          setItemsPerPage={setItemsPerPage}
+          notifyOrders={notifyOrders}
+          setNotifyOrders={setNotifyOrders}
+          notifyMessages={notifyMessages}
+          setNotifyMessages={setNotifyMessages}
+          timezone={timezone}
+          setTimezone={setTimezone}
+          loading={loading}
+          collapsed={collapsedSections.panel}
+          onToggle={() => toggleSection('panel')}
+          onSave={savePanelSettings}
+        />
 
-        <Card className="mb-6">
-          <CardHeader 
-            className="cursor-pointer flex flex-row items-center justify-between"
-            onClick={() => toggleSection('linked')}
-          >
-            <CardTitle className="flex items-center gap-2">
-              <Icon name={collapsedSections.linked ? "ChevronRight" : "ChevronDown"} size={20} />
-              Привязать аккаунты
-            </CardTitle>
-          </CardHeader>
-          {!collapsedSections.linked && (
-            <CardContent className="space-y-4">
-              <div>
-                <Label>Привязанные аккаунты</Label>
-                {linkedAccounts.length > 0 ? (
-                  <ul className="list-disc list-inside mt-2">
-                    {linkedAccounts.map((account, index) => (
-                      <li key={index} className="text-gray-700">{account}</li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-gray-600 mt-2">Нет привязанных аккаунтов</p>
-                )}
-              </div>
-              <div className="flex gap-2">
-                <Input
-                  placeholder="Логин"
-                  value={newAccountLogin}
-                  onChange={(e) => setNewAccountLogin(e.target.value)}
-                />
-                <Input
-                  type="password"
-                  placeholder="Пароль"
-                  value={newAccountPassword}
-                  onChange={(e) => setNewAccountPassword(e.target.value)}
-                />
-                <Button onClick={linkAccount} disabled={loading}>
-                  Привязать
-                </Button>
-              </div>
-            </CardContent>
-          )}
-        </Card>
+        <LinkedAccountsSection
+          linkedAccounts={linkedAccounts}
+          newAccountLogin={newAccountLogin}
+          setNewAccountLogin={setNewAccountLogin}
+          newAccountPassword={newAccountPassword}
+          setNewAccountPassword={setNewAccountPassword}
+          onLinkAccount={linkAccount}
+          loading={loading}
+          collapsed={collapsedSections.linked}
+          onToggle={() => toggleSection('linked')}
+        />
 
-        <Card className="mb-6">
-          <CardHeader 
-            className="cursor-pointer flex flex-row items-center justify-between"
-            onClick={() => toggleSection('sape')}
-          >
-            <CardTitle className="flex items-center gap-2">
-              <Icon name={collapsedSections.sape ? "ChevronRight" : "ChevronDown"} size={20} />
-              Подключение рекламы SAPE
-            </CardTitle>
-          </CardHeader>
-          {!collapsedSections.sape && (
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="sapeCode">Код SAPE</Label>
-                <Input
-                  id="sapeCode"
-                  value={sapeCode}
-                  onChange={(e) => setSapeCode(e.target.value)}
-                />
-                <p className="text-sm text-gray-600 mt-1">
-                  Для отображения ссылок добавьте метки &lt;!--sape_links(n)--&gt; в шаблон
-                </p>
-              </div>
-              <Button onClick={saveSapeSettings} disabled={loading}>
-                {loading ? 'Сохранение...' : 'Сохранить'}
-              </Button>
-            </CardContent>
-          )}
-        </Card>
+        <SapeSection
+          sapeCode={sapeCode}
+          setSapeCode={setSapeCode}
+          loading={loading}
+          collapsed={collapsedSections.sape}
+          onToggle={() => toggleSection('sape')}
+          onSave={saveSapeSettings}
+        />
 
-        <Card className="mb-6 border-red-200">
-          <CardHeader 
-            className="cursor-pointer flex flex-row items-center justify-between"
-            onClick={() => toggleSection('delete')}
-          >
-            <CardTitle className="flex items-center gap-2 text-red-600">
-              <Icon name={collapsedSections.delete ? "ChevronRight" : "ChevronDown"} size={20} />
-              Удаление сайта
-            </CardTitle>
-          </CardHeader>
-          {!collapsedSections.delete && (
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="deletePassword">Текущий пароль</Label>
-                <Input
-                  id="deletePassword"
-                  type="password"
-                  value={deletePassword}
-                  onChange={(e) => setDeletePassword(e.target.value)}
-                />
-                <p className="text-sm text-red-600 mt-1">
-                  ⚠️ Внимание! Сайт удаляется полностью без возможности восстановления!
-                </p>
-              </div>
-              <Button 
-                variant="destructive" 
-                onClick={deleteSite} 
-                disabled={loading}
-              >
-                {loading ? 'Удаление...' : 'Удалить сайт'}
-              </Button>
-            </CardContent>
-          )}
-        </Card>
+        <DeleteSection
+          deletePassword={deletePassword}
+          setDeletePassword={setDeletePassword}
+          onDelete={deleteSite}
+          loading={loading}
+          collapsed={collapsedSections.delete}
+          onToggle={() => toggleSection('delete')}
+        />
       </div>
     </div>
   );
