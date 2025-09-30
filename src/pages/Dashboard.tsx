@@ -89,7 +89,7 @@ const Dashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-poiret font-bold mb-2 text-slate-800">Добро пожаловать в панель управления!</h1>
-                <p className="text-white/90 text-lg">
+                <p className="text-lg text-slate-800">
                   Начните с настройки вашего магазина. Следуйте пошаговой инструкции ниже.
                 </p>
               </div>
