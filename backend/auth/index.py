@@ -199,6 +199,85 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 'isBase64Encoded': False
             }
         
+        elif action == 'refresh':
+            refresh_token = body_data.get('refresh_token', '')
+            
+            if not refresh_token:
+                return {
+                    'statusCode': 400,
+                    'headers': headers,
+                    'body': json.dumps({
+                        'success': False,
+                        'message': 'Refresh token обязателен'
+                    }),
+                    'isBase64Encoded': False
+                }
+            
+            conn = get_db_connection()
+            try:
+                with conn.cursor() as cur:
+                    cur.execute(
+                        "SELECT user_id, expires_at FROM sessions WHERE refresh_token = '%s'" % refresh_token
+                    )
+                    result = cur.fetchone()
+                    
+                    if not result:
+                        return {
+                            'statusCode': 401,
+                            'headers': headers,
+                            'body': json.dumps({
+                                'success': False,
+                                'message': 'Невалидный refresh token'
+                            }),
+                            'isBase64Encoded': False
+                        }
+                    
+                    expires_at = result['expires_at']
+                    current_time = time.time()
+                    
+                    if expires_at.timestamp() < current_time:
+                        return {
+                            'statusCode': 401,
+                            'headers': headers,
+                            'body': json.dumps({
+                                'success': False,
+                                'message': 'Refresh token истёк'
+                            }),
+                            'isBase64Encoded': False
+                        }
+                    
+                    user_id = result['user_id']
+                    
+                    new_access_token, new_refresh_token = generate_tokens()
+                    
+                    cur.execute(
+                        "UPDATE sessions SET access_token = '%s', refresh_token = '%s', updated_at = CURRENT_TIMESTAMP WHERE refresh_token = '%s'" % (new_access_token, new_refresh_token, refresh_token)
+                    )
+                    conn.commit()
+                    
+                    cur.execute("SELECT email, phone, phone_verified FROM users WHERE id = %s" % user_id)
+                    user_data = cur.fetchone()
+                    
+                    return {
+                        'statusCode': 200,
+                        'headers': headers,
+                        'body': json.dumps({
+                            'success': True,
+                            'message': 'Токен обновлён',
+                            'access_token': new_access_token,
+                            'refresh_token': new_refresh_token,
+                            'user': {
+                                'id': user_id,
+                                'email': user_data['email'] if user_data else '',
+                                'phone': user_data['phone'] if user_data else '',
+                                'phone_verified': user_data['phone_verified'] if user_data else False
+                            }
+                        }),
+                        'isBase64Encoded': False
+                    }
+            finally:
+                conn.close()
+        
         elif action == 'login':
             user = get_user_by_email(email)
             
@@ -251,7 +330,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 'headers': headers,
                 'body': json.dumps({
                     'success': False,
-                    'message': 'Неизвестное действие. Используйте action: register или login'
+                    'message': 'Неизвестное действие. Используйте action: register, login или refresh'
                 }),
                 'isBase64Encoded': False
             }

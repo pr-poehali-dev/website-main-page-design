@@ -7,6 +7,7 @@ import { Switch } from '@/components/ui/switch';
 import Icon from '@/components/ui/icon';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { fetchWithAuth } from '@/utils/api';
 
 const API_URL = 'https://functions.poehali.dev/9f11f70c-7220-45b8-849f-375ef1e6c2e4';
 
@@ -48,10 +49,8 @@ const GeneralSettings = () => {
     if (!accessToken) return;
     
     try {
-      const response = await fetch(API_URL, {
-        headers: {
-          'X-Auth-Token': accessToken
-        }
+      const response = await fetchWithAuth(API_URL, {
+        method: 'GET'
       });
       const data = await response.json();
       
@@ -84,11 +83,10 @@ const GeneralSettings = () => {
   const saveAccountSettings = async () => {
     setLoading(true);
     try {
-      const response = await fetch(API_URL, {
+      const response = await fetchWithAuth(API_URL, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'X-Auth-Token': accessToken
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ type: 'account', email })
       });
@@ -114,11 +112,10 @@ const GeneralSettings = () => {
     
     setLoading(true);
     try {
-      const response = await fetch(API_URL, {
+      const response = await fetchWithAuth(API_URL, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'X-Auth-Token': accessToken
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ 
           type: 'password', 
@@ -146,11 +143,10 @@ const GeneralSettings = () => {
   const saveAuthSettings = async () => {
     setLoading(true);
     try {
-      const response = await fetch(API_URL, {
+      const response = await fetchWithAuth(API_URL, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'X-Auth-Token': accessToken
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ type: 'auth', auth_method: authMethod })
       });
@@ -171,11 +167,10 @@ const GeneralSettings = () => {
   const saveSitemapSettings = async () => {
     setLoading(true);
     try {
-      const response = await fetch(API_URL, {
+      const response = await fetchWithAuth(API_URL, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'X-Auth-Token': accessToken
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ type: 'sitemap', sitemap_enabled: sitemapEnabled })
       });
@@ -196,11 +191,10 @@ const GeneralSettings = () => {
   const saveImageSettings = async () => {
     setLoading(true);
     try {
-      const response = await fetch(API_URL, {
+      const response = await fetchWithAuth(API_URL, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'X-Auth-Token': accessToken
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ 
           type: 'images', 
@@ -225,11 +219,10 @@ const GeneralSettings = () => {
   const savePanelSettings = async () => {
     setLoading(true);
     try {
-      const response = await fetch(API_URL, {
+      const response = await fetchWithAuth(API_URL, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'X-Auth-Token': accessToken
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ 
           type: 'panel',
@@ -258,11 +251,10 @@ const GeneralSettings = () => {
     
     setLoading(true);
     try {
-      const response = await fetch(`${API_URL}?action=telegram`, {
+      const response = await fetchWithAuth(`${API_URL}?action=telegram`, {
         method: 'DELETE',
         headers: {
-          'Content-Type': 'application/json',
-          'X-Auth-Token': accessToken
+          'Content-Type': 'application/json'
         }
       });
       const data = await response.json();
