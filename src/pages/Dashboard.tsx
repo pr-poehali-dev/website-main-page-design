@@ -10,7 +10,9 @@ const Dashboard = () => {
   const [commentsCount] = useState(0);
 
   const menuItems = [
-    { title: 'Общие настройки', icon: 'Settings', description: 'Общие настройки сайта: смена пароля, перенос на отдельный домен', link: '/dashboard/settings' },
+    { title: 'Общие настройки', icon: 'Settings', description: 'Общие настройки сайта: смена пароля, перенос на отдельный домен', link: '/settings' },
+    { title: 'Товары', icon: 'Package', description: 'Управление товарами магазина. Добавление и редактирование', link: '/products' },
+    { title: 'Заказы', icon: 'ShoppingCart', description: 'Список заказов и их обработка', link: '/orders' },
     { title: 'Модули сайта', icon: 'Layers', description: 'Подключение отдельных модулей - магазин, новости, статьи, формы', link: '/dashboard/modules' },
     { title: 'Страницы сайта', icon: 'FileText', description: 'Управление страницами сайта. Добавление и редактирование', link: '/dashboard/pages' },
     { title: 'Меню сайта', icon: 'Menu', description: 'Управление меню сайта. Создание меню и пунктов', link: '/dashboard/menu' },
