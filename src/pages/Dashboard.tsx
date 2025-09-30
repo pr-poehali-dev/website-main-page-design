@@ -141,7 +141,11 @@ const Dashboard = () => {
         {/* Quick Stats */}
         <div className="grid md:grid-cols-3 gap-6 mb-8">
           {quickStats.map((stat, index) => (
-            <Card key={index} className="border-primary/20 hover:shadow-lg transition-shadow">
+            <Card 
+              key={index} 
+              className="border-primary/20 hover:shadow-lg transition-all cursor-pointer"
+              onClick={() => index === 0 ? window.location.href = '/orders' : index === 1 ? window.location.href = '/dashboard/comments' : null}
+            >
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -156,6 +160,24 @@ const Dashboard = () => {
             </Card>
           ))}
         </div>
+
+        {/* Analytics Banner */}
+        <Card className="mb-8 border-primary/20 bg-gradient-to-r from-primary/10 to-secondary/20 hover:shadow-lg transition-all cursor-pointer" onClick={() => window.location.href = '/analytics'}>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 bg-gradient-primary rounded-xl flex items-center justify-center">
+                  <Icon name="BarChart3" size={32} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-neutral-dark mb-1">Аналитика и отчеты</h3>
+                  <p className="text-sm text-neutral-dark/70">Детальная статистика продаж, графики и ключевые метрики</p>
+                </div>
+              </div>
+              <Icon name="ArrowRight" size={24} className="text-primary" />
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Main Menu Grid */}
         <div>
