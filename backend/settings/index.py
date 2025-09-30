@@ -2,6 +2,7 @@ import json
 import os
 import psycopg2
 from psycopg2.extras import RealDictCursor
+import time
 from typing import Dict, Any, Optional
 
 def get_db_connection():
@@ -10,6 +11,32 @@ def get_db_connection():
     if not database_url:
         raise ValueError('DATABASE_URL environment variable is not set')
     return psycopg2.connect(database_url, cursor_factory=RealDictCursor)
+
+def verify_access_token(token: str) -> Optional[int]:
+    '''Проверяет access токен и возвращает user_id если валидный'''
+    if not token:
+        return None
+    
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT user_id, expires_at FROM sessions WHERE access_token = '%s'" % token
+            )
+            result = cur.fetchone()
+            
+            if not result:
+                return None
+            
+            expires_at = result['expires_at']
+            current_time = time.time()
+            
+            if expires_at.timestamp() < current_time:
+                return None
+            
+            return result['user_id']
+    finally:
+        conn.close()
 
 def get_user_settings(user_id: int = 1) -> Optional[Dict[str, Any]]:
     '''Получает настройки пользователя из БД'''
@@ -167,7 +194,19 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         'Access-Control-Allow-Origin': '*'
     }
     
-    user_id = 1
+    access_token = event.get('headers', {}).get('X-Auth-Token', '')
+    user_id = verify_access_token(access_token)
+    
+    if not user_id:
+        return {
+            'statusCode': 401,
+            'headers': headers,
+            'body': json.dumps({
+                'success': False,
+                'message': 'Требуется авторизация'
+            }),
+            'isBase64Encoded': False
+        }
     
     if method == 'GET':
         settings_data = get_user_settings(user_id)

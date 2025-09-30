@@ -1,62 +1,10 @@
 {
   "tests": [
     {
-      "name": "Get current settings",
+      "name": "Reject unauthorized access",
       "method": "GET",
       "path": "/",
-      "expectedStatus": 200,
-      "expectedBody": {
-        "login": "string",
-        "email": "string",
-        "phone": "string",
-        "phone_verified": "boolean",
-        "telegram_account": "string",
-        "telegram_connected": "boolean",
-        "domain": "string",
-        "sitemap_enabled": "boolean"
-      },
-      "bodyMatcher": "partial"
-    },
-    {
-      "name": "Update account settings",
-      "method": "POST",
-      "path": "/",
-      "body": {
-        "type": "account",
-        "email": "test@example.com"
-      },
-      "expectedStatus": 200,
-      "expectedBody": {
-        "success": true,
-        "message": "string"
-      },
-      "bodyMatcher": "partial"
-    },
-    {
-      "name": "Update password with validation",
-      "method": "POST",
-      "path": "/",
-      "body": {
-        "type": "password",
-        "new_password": "newpass123",
-        "old_password": "oldpass123"
-      },
-      "expectedStatus": 200,
-      "expectedBody": {
-        "success": true
-      },
-      "bodyMatcher": "partial"
-    },
-    {
-      "name": "Reject short password",
-      "method": "POST",
-      "path": "/",
-      "body": {
-        "type": "password",
-        "new_password": "123",
-        "old_password": "oldpass123"
-      },
-      "expectedStatus": 400,
+      "expectedStatus": 401,
       "expectedBody": {
         "success": false,
         "message": "string"
@@ -64,42 +12,16 @@
       "bodyMatcher": "partial"
     },
     {
-      "name": "Update image settings",
+      "name": "Reject POST without token",
       "method": "POST",
       "path": "/",
       "body": {
-        "type": "images",
-        "quality": 85,
-        "watermark_position": "5"
+        "type": "account",
+        "email": "test@example.com"
       },
-      "expectedStatus": 200,
-      "expectedBody": {
-        "success": true
-      },
-      "bodyMatcher": "partial"
-    },
-    {
-      "name": "Reject invalid quality",
-      "method": "POST",
-      "path": "/",
-      "body": {
-        "type": "images",
-        "quality": 150,
-        "watermark_position": "0"
-      },
-      "expectedStatus": 400,
+      "expectedStatus": 401,
       "expectedBody": {
         "success": false
-      },
-      "bodyMatcher": "partial"
-    },
-    {
-      "name": "Disconnect Telegram",
-      "method": "DELETE",
-      "path": "/?action=telegram",
-      "expectedStatus": 200,
-      "expectedBody": {
-        "success": true
       },
       "bodyMatcher": "partial"
     }

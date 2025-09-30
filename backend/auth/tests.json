@@ -1,0 +1,84 @@
+{
+  "tests": [
+    {
+      "name": "Reject duplicate email registration",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "action": "register",
+        "email": "demo@example.com",
+        "password": "testpass123"
+      },
+      "expectedStatus": 400,
+      "expectedBody": {
+        "success": false,
+        "message": "string"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Reject short password",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "action": "register",
+        "email": "test@test.com",
+        "password": "123"
+      },
+      "expectedStatus": 400,
+      "expectedBody": {
+        "success": false,
+        "message": "string"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Login with valid credentials",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "action": "login",
+        "email": "demo@example.com",
+        "password": "demopass123"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true,
+        "access_token": "string",
+        "refresh_token": "string"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Reject invalid email",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "action": "login",
+        "email": "wronguser@test.com",
+        "password": "anypassword"
+      },
+      "expectedStatus": 401,
+      "expectedBody": {
+        "success": false,
+        "message": "string"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Reject invalid password",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "action": "login",
+        "email": "demo@example.com",
+        "password": "wrongpassword"
+      },
+      "expectedStatus": 401,
+      "expectedBody": {
+        "success": false
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
