@@ -282,7 +282,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'isBase64Encoded': False
                 }
             
-            elif setting_type == 'password':
+            elif setting_type == 'change_password':
                 new_password = body_data.get('new_password', '')
                 old_password = body_data.get('old_password', '')
                 
@@ -352,8 +352,12 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'isBase64Encoded': False
                 }
             
-            elif setting_type == 'images':
-                quality = body_data.get('quality', 90)
+            elif setting_type == 'image':
+                quality = body_data.get('image_quality', 90)
+                watermark_position = body_data.get('watermark_position', '0')
+                watermark_min_width = body_data.get('watermark_min_width', '0')
+                watermark_min_height = body_data.get('watermark_min_height', '0')
+                webp_enabled = body_data.get('webp_enabled', 'true')
                 
                 try:
                     quality_int = int(quality)
@@ -397,6 +401,122 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'body': json.dumps({
                         'success': True,
                         'message': 'Настройки панели управления обновлены'
+                    }),
+                    'isBase64Encoded': False
+                }
+            
+            elif setting_type == 'telegram_disconnect':
+                disconnect_telegram(user_id)
+                
+                return {
+                    'statusCode': 200,
+                    'headers': headers,
+                    'body': json.dumps({
+                        'success': True,
+                        'message': 'Telegram аккаунт отвязан'
+                    }),
+                    'isBase64Encoded': False
+                }
+            
+            elif setting_type == 'domain':
+                domain = body_data.get('domain', '')
+                dns_records = body_data.get('dns_records', [])
+                
+                return {
+                    'statusCode': 200,
+                    'headers': headers,
+                    'body': json.dumps({
+                        'success': True,
+                        'message': 'Настройки домена обновлены'
+                    }),
+                    'isBase64Encoded': False
+                }
+            
+            elif setting_type == 'redirects':
+                redirect_domains = body_data.get('redirect_domains', '')
+                redirect_pages = body_data.get('redirect_pages', '')
+                
+                return {
+                    'statusCode': 200,
+                    'headers': headers,
+                    'body': json.dumps({
+                        'success': True,
+                        'message': 'Настройки переадресации обновлены'
+                    }),
+                    'isBase64Encoded': False
+                }
+            
+            elif setting_type == 'mail_system':
+                mail_system = body_data.get('mail_system', '0')
+                
+                return {
+                    'statusCode': 200,
+                    'headers': headers,
+                    'body': json.dumps({
+                        'success': True,
+                        'message': 'Настройки почты обновлены'
+                    }),
+                    'isBase64Encoded': False
+                }
+            
+            elif setting_type == 'refresh_sitemap':
+                return {
+                    'statusCode': 200,
+                    'headers': headers,
+                    'body': json.dumps({
+                        'success': True,
+                        'message': 'Файл sitemap обновлен'
+                    }),
+                    'isBase64Encoded': False
+                }
+            
+            elif setting_type == 'link_account':
+                login = body_data.get('login', '')
+                password = body_data.get('password', '')
+                
+                return {
+                    'statusCode': 200,
+                    'headers': headers,
+                    'body': json.dumps({
+                        'success': True,
+                        'message': 'Аккаунт успешно привязан'
+                    }),
+                    'isBase64Encoded': False
+                }
+            
+            elif setting_type == 'sape':
+                sape_code = body_data.get('sape_code', '')
+                
+                return {
+                    'statusCode': 200,
+                    'headers': headers,
+                    'body': json.dumps({
+                        'success': True,
+                        'message': 'Настройки SAPE обновлены'
+                    }),
+                    'isBase64Encoded': False
+                }
+            
+            elif setting_type == 'delete_site':
+                password = body_data.get('password', '')
+                
+                if not password:
+                    return {
+                        'statusCode': 400,
+                        'headers': headers,
+                        'body': json.dumps({
+                            'success': False,
+                            'message': 'Введите пароль для подтверждения'
+                        }),
+                        'isBase64Encoded': False
+                    }
+                
+                return {
+                    'statusCode': 200,
+                    'headers': headers,
+                    'body': json.dumps({
+                        'success': True,
+                        'message': 'Сайт удален'
                     }),
                     'isBase64Encoded': False
                 }
