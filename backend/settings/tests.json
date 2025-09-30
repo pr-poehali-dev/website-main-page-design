@@ -10,6 +10,7 @@
         "email": "string",
         "phone": "string",
         "phone_verified": "boolean",
+        "telegram_account": "string",
         "telegram_connected": "boolean",
         "domain": "string",
         "sitemap_enabled": "boolean"

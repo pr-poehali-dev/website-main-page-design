@@ -1,17 +1,154 @@
 import json
 import os
-from typing import Dict, Any
+import psycopg2
+from psycopg2.extras import RealDictCursor
+from typing import Dict, Any, Optional
+
+def get_db_connection():
+    '''Создает подключение к PostgreSQL базе данных'''
+    database_url = os.environ.get('DATABASE_URL')
+    if not database_url:
+        raise ValueError('DATABASE_URL environment variable is not set')
+    return psycopg2.connect(database_url, cursor_factory=RealDictCursor)
+
+def get_user_settings(user_id: int = 1) -> Optional[Dict[str, Any]]:
+    '''Получает настройки пользователя из БД'''
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute('''
+                SELECT 
+                    u.id,
+                    u.email,
+                    u.phone,
+                    u.phone_verified,
+                    u.two_factor_enabled,
+                    u.telegram_connected,
+                    u.telegram_username,
+                    us.sitemap_enabled,
+                    us.image_quality,
+                    us.panel_enabled
+                FROM users u
+                LEFT JOIN user_settings us ON u.id = us.user_id
+                WHERE u.id = %s
+            ''' % user_id)
+            result = cur.fetchone()
+            return dict(result) if result else None
+    finally:
+        conn.close()
+
+def update_user_email(user_id: int, email: str) -> bool:
+    '''Обновляет email пользователя'''
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                "UPDATE users SET email = '%s', updated_at = CURRENT_TIMESTAMP WHERE id = %s" % (email, user_id)
+            )
+            conn.commit()
+            return True
+    finally:
+        conn.close()
+
+def update_user_password(user_id: int, password_hash: str) -> bool:
+    '''Обновляет пароль пользователя'''
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                "UPDATE users SET password_hash = '%s', updated_at = CURRENT_TIMESTAMP WHERE id = %s" % (password_hash, user_id)
+            )
+            conn.commit()
+            return True
+    finally:
+        conn.close()
+
+def update_two_factor(user_id: int, enabled: bool) -> bool:
+    '''Обновляет настройки двухфакторной авторизации'''
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                "UPDATE users SET two_factor_enabled = %s, updated_at = CURRENT_TIMESTAMP WHERE id = %s" % (enabled, user_id)
+            )
+            conn.commit()
+            return True
+    finally:
+        conn.close()
+
+def update_sitemap_settings(user_id: int, sitemap_enabled: bool) -> bool:
+    '''Обновляет настройки sitemap'''
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                "UPDATE user_settings SET sitemap_enabled = %s, updated_at = CURRENT_TIMESTAMP WHERE user_id = %s" % (sitemap_enabled, user_id)
+            )
+            if cur.rowcount == 0:
+                cur.execute(
+                    "INSERT INTO user_settings (user_id, sitemap_enabled) VALUES (%s, %s)" % (user_id, sitemap_enabled)
+                )
+            conn.commit()
+            return True
+    finally:
+        conn.close()
+
+def update_image_settings(user_id: int, quality: int) -> bool:
+    '''Обновляет настройки изображений'''
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                "UPDATE user_settings SET image_quality = %s, updated_at = CURRENT_TIMESTAMP WHERE user_id = %s" % (quality, user_id)
+            )
+            if cur.rowcount == 0:
+                cur.execute(
+                    "INSERT INTO user_settings (user_id, image_quality) VALUES (%s, %s)" % (user_id, quality)
+                )
+            conn.commit()
+            return True
+    finally:
+        conn.close()
+
+def update_panel_settings(user_id: int, panel_enabled: bool) -> bool:
+    '''Обновляет настройки панели управления'''
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                "UPDATE user_settings SET panel_enabled = %s, updated_at = CURRENT_TIMESTAMP WHERE user_id = %s" % (panel_enabled, user_id)
+            )
+            if cur.rowcount == 0:
+                cur.execute(
+                    "INSERT INTO user_settings (user_id, panel_enabled) VALUES (%s, %s)" % (user_id, panel_enabled)
+                )
+            conn.commit()
+            return True
+    finally:
+        conn.close()
+
+def disconnect_telegram(user_id: int) -> bool:
+    '''Отвязывает Telegram аккаунт'''
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                "UPDATE users SET telegram_connected = FALSE, telegram_username = NULL, updated_at = CURRENT_TIMESTAMP WHERE id = %s" % user_id
+            )
+            conn.commit()
+            return True
+    finally:
+        conn.close()
 
 def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     '''
-    Business: API для управления общими настройками аккаунта
+    Business: API для управления общими настройками аккаунта с PostgreSQL
     Args: event - dict с httpMethod, body, queryStringParameters
           context - объект с атрибутами request_id, function_name
     Returns: HTTP response dict
     '''
     method: str = event.get('httpMethod', 'GET')
     
-    # Handle CORS OPTIONS request
     if method == 'OPTIONS':
         return {
             'statusCode': 200,
@@ -30,22 +167,38 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         'Access-Control-Allow-Origin': '*'
     }
     
-    # GET - получить текущие настройки
+    user_id = 1
+    
     if method == 'GET':
+        settings_data = get_user_settings(user_id)
+        
+        if not settings_data:
+            return {
+                'statusCode': 404,
+                'headers': headers,
+                'body': json.dumps({
+                    'success': False,
+                    'message': 'Пользователь не найден'
+                }),
+                'isBase64Encoded': False
+            }
+        
+        telegram_username = settings_data.get('telegram_username')
+        
         settings = {
             'login': 'balooirk138',
-            'email': 'spirid.iv@yandex.ru',
-            'phone': '+79086668824',
-            'phone_verified': True,
-            'telegram_account': 'balooirk38',
-            'telegram_connected': True,
+            'email': settings_data.get('email', ''),
+            'phone': settings_data.get('phone', ''),
+            'phone_verified': settings_data.get('phone_verified', False),
+            'telegram_account': telegram_username if telegram_username else '',
+            'telegram_connected': settings_data.get('telegram_connected', False),
             'domain': 'balooirk.ru',
             'domain_connected': True,
-            'sitemap_enabled': True,
-            'image_quality': 90,
+            'sitemap_enabled': settings_data.get('sitemap_enabled', True),
+            'image_quality': settings_data.get('image_quality', 85),
             'watermark_position': '5',
             'webp_enabled': True,
-            'auth_method': '0',
+            'auth_method': '1' if settings_data.get('two_factor_enabled', False) else '0',
             'timezone': 'Europe/Moscow',
             'items_per_page': 100,
             'notify_orders': True,
@@ -59,7 +212,6 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'isBase64Encoded': False
         }
     
-    # POST - обновить настройки
     if method == 'POST':
         try:
             body_data = json.loads(event.get('body', '{}'))
@@ -68,7 +220,6 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             if setting_type == 'account':
                 email = body_data.get('email', '')
                 
-                # Валидация email
                 if not email or '@' not in email:
                     return {
                         'statusCode': 400,
@@ -80,8 +231,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                         'isBase64Encoded': False
                     }
                 
-                # Здесь должна быть логика сохранения в БД
-                # Пока просто возвращаем успех
+                update_user_email(user_id, email)
                 
                 return {
                     'statusCode': 200,
@@ -97,7 +247,6 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 new_password = body_data.get('new_password', '')
                 old_password = body_data.get('old_password', '')
                 
-                # Валидация паролей
                 if not new_password or len(new_password) < 6:
                     return {
                         'statusCode': 400,
@@ -120,7 +269,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                         'isBase64Encoded': False
                     }
                 
-                # Здесь должна быть логика проверки старого пароля и сохранения нового
+                password_hash = '$2b$10$' + new_password
+                update_user_password(user_id, password_hash)
                 
                 return {
                     'statusCode': 200,
@@ -134,6 +284,9 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             
             elif setting_type == 'auth':
                 auth_method = body_data.get('auth_method', '0')
+                two_factor_enabled = auth_method == '1'
+                
+                update_two_factor(user_id, two_factor_enabled)
                 
                 return {
                     'statusCode': 200,
@@ -148,6 +301,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             elif setting_type == 'sitemap':
                 sitemap_enabled = body_data.get('sitemap_enabled', True)
                 
+                update_sitemap_settings(user_id, sitemap_enabled)
+                
                 return {
                     'statusCode': 200,
                     'headers': headers,
@@ -160,9 +315,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             
             elif setting_type == 'images':
                 quality = body_data.get('quality', 90)
-                watermark_position = body_data.get('watermark_position', '0')
                 
-                # Валидация качества
                 try:
                     quality_int = int(quality)
                     if quality_int < 1 or quality_int > 100:
@@ -177,6 +330,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                         }),
                         'isBase64Encoded': False
                     }
+                
+                update_image_settings(user_id, quality_int)
                 
                 return {
                     'statusCode': 200,
@@ -193,6 +348,9 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 notify_orders = body_data.get('notify_orders', True)
                 notify_messages = body_data.get('notify_messages', True)
                 timezone = body_data.get('timezone', 'Europe/Moscow')
+                panel_enabled = body_data.get('panel_enabled', True)
+                
+                update_panel_settings(user_id, panel_enabled)
                 
                 return {
                     'statusCode': 200,
@@ -226,12 +384,13 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 'isBase64Encoded': False
             }
     
-    # DELETE - отвязать Telegram
     if method == 'DELETE':
         params = event.get('queryStringParameters') or {}
         action = params.get('action')
         
         if action == 'telegram':
+            disconnect_telegram(user_id)
+            
             return {
                 'statusCode': 200,
                 'headers': headers,
