@@ -8,28 +8,28 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 w-full bg-white/80 backdrop-blur-md z-50 border-b border-primary/10">
+    <header className="fixed top-0 w-full bg-white/90 backdrop-blur-md z-50 border-b border-purple-200 shadow-sm">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-8">
-            <a href="/" className="text-2xl font-poiret font-bold text-primary">
+            <a href="/" className="text-3xl font-poiret font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
               AllTrades
             </a>
             
             <nav className="hidden md:flex items-center space-x-6">
-              <a href="#" className="text-sm font-medium text-neutral-dark hover:text-primary transition-colors">
+              <a href="#" className="text-sm font-poiret font-medium text-neutral-dark hover:text-purple-600 transition-colors">
                 Главная
               </a>
               
               <div className="relative group">
-                <button className="text-sm font-medium text-neutral-dark hover:text-primary transition-colors flex items-center space-x-1">
+                <button className="text-sm font-poiret font-medium text-neutral-dark hover:text-purple-600 transition-colors flex items-center space-x-1">
                   <span>Платформа</span>
                   <Icon name="ChevronDown" size={16} />
                 </button>
                 
-                <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border border-primary/10">
+                <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border border-purple-200">
                   <div className="py-2">
-                    <a href="#possibilities" className="block px-4 py-2 text-sm text-neutral-dark hover:bg-primary-light hover:text-primary transition-colors">
+                    <a href="#possibilities" className="block px-4 py-2 text-sm font-poiret text-neutral-dark hover:bg-purple-50 hover:text-purple-600 transition-colors">
                       Возможности
                     </a>
                     <a href="#modules" className="block px-4 py-2 text-sm text-neutral-dark hover:bg-primary-light hover:text-primary transition-colors">
@@ -48,7 +48,7 @@ const Header = () => {
                 </div>
               </div>
               
-              <a href="#pricing" className="text-sm font-medium text-neutral-dark hover:text-primary transition-colors">
+              <a href="#pricing" className="text-sm font-poiret font-medium text-neutral-dark hover:text-purple-600 transition-colors">
                 Тарифы
               </a>
             </nav>
@@ -57,13 +57,13 @@ const Header = () => {
           <div className="hidden md:flex items-center space-x-3">
             <Button 
               variant="outline" 
-              className="border-primary text-primary hover:bg-primary hover:text-white"
+              className="border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white font-poiret"
               onClick={() => window.location.href = '/login'}
             >
               Вход
             </Button>
             <Button 
-              className="bg-primary hover:bg-primary-dark text-white"
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-poiret shadow-lg"
               onClick={() => window.location.href = '/#create-account'}
             >
               Создать магазин

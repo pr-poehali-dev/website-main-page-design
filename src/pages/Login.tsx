@@ -16,7 +16,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral via-secondary to-primary-light flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <a href="/" className="inline-block">
@@ -26,9 +26,9 @@ const Login = () => {
           </a>
         </div>
 
-        <Card className="border-primary/20 shadow-2xl">
+        <Card className="border-purple-200 shadow-2xl">
           <CardHeader className="text-center">
-            <CardTitle className="font-poiret text-3xl mb-2">Вход в систему</CardTitle>
+            <CardTitle className="font-poiret text-3xl mb-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Вход в систему</CardTitle>
             <CardDescription className="text-base">
               Войдите в панель управления магазином
             </CardDescription>
@@ -46,7 +46,7 @@ const Login = () => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Введите ваш логин"
-                  className="border-primary/20 focus:border-primary"
+                  className="border-purple-200 focus:border-purple-600 font-poiret"
                   required
                 />
               </div>
@@ -61,7 +61,7 @@ const Login = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Введите ваш пароль"
-                  className="border-primary/20 focus:border-primary"
+                  className="border-purple-200 focus:border-purple-600 font-poiret"
                   required
                 />
               </div>
@@ -69,13 +69,13 @@ const Login = () => {
               <div className="flex items-center justify-between">
                 <Button
                   type="submit"
-                  className="bg-primary hover:bg-primary-dark text-white px-8"
+                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 font-poiret shadow-lg"
                 >
                   Войти
                 </Button>
                 <a
                   href="#"
-                  className="text-sm text-neutral-dark/70 hover:text-primary transition-colors"
+                  className="text-sm text-neutral-dark/70 hover:text-purple-600 transition-colors font-poiret"
                 >
                   Забыли пароль?
                 </a>
@@ -83,7 +83,7 @@ const Login = () => {
 
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-primary/10"></div>
+                  <div className="w-full border-t border-purple-100"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
                   <span className="bg-white px-4 text-neutral-dark/60">или</span>
@@ -93,7 +93,7 @@ const Login = () => {
               <Button
                 type="button"
                 variant="outline"
-                className="w-full border-primary/20 hover:bg-primary-light hover:border-primary"
+                className="w-full border-purple-200 hover:bg-purple-50 hover:border-purple-600 font-poiret"
               >
                 <Icon name="Send" size={20} className="mr-2" />
                 Войти через Telegram
@@ -103,7 +103,7 @@ const Login = () => {
             <div className="mt-6 text-center">
               <p className="text-sm text-neutral-dark/70">
                 Нет аккаунта?{' '}
-                <a href="/#create-account" className="text-primary hover:text-primary-dark font-medium transition-colors">
+                <a href="/#create-account" className="text-purple-600 hover:text-pink-600 font-medium transition-colors font-poiret">
                   Создать магазин
                 </a>
               </p>
@@ -114,7 +114,7 @@ const Login = () => {
         <div className="mt-6 text-center">
           <a
             href="/"
-            className="text-sm text-neutral-dark/70 hover:text-primary transition-colors inline-flex items-center"
+            className="text-sm text-neutral-dark/70 hover:text-purple-600 transition-colors inline-flex items-center font-poiret"
           >
             <Icon name="ArrowLeft" size={16} className="mr-1" />
             Вернуться на главную

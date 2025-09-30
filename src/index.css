@@ -110,6 +110,12 @@
   h6 {
     font-family: "Poiret One", cursive;
   }
+
+  button,
+  a,
+  .font-poiret {
+    font-family: "Poiret One", cursive;
+  }
 }
 
 @layer utilities {
