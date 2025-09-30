@@ -253,7 +253,7 @@ const Dashboard = () => {
             </p>
             <p className="text-red-400 text-xs mb-2">Необходимо пополнить счет</p>
             <p className="mb-3">
-              <a href="/dashboard/payment" className="text-accent-orange hover:text-accent-orange/80 text-xs font-semibold">
+              <a href="/dashboard/payment" className="text-accent-cream hover:text-primary-light text-xs font-semibold">
                 Пополнить счет
               </a>
             </p>
@@ -305,7 +305,7 @@ const Dashboard = () => {
                   </a>
                   <a 
                     href="/dashboard/payment" 
-                    className="ml-2 px-2 py-1 bg-accent-orange text-white text-xs hover:bg-accent-orange/90 rounded shadow-md"
+                    className="ml-2 px-2 py-1 bg-accent-cream text-primary-dark text-xs hover:bg-primary-light rounded shadow-md"
                   >
                     пополнить
                   </a>

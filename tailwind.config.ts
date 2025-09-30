@@ -19,10 +19,11 @@ export default {
 		},
 		extend: {
 			colors: {
-				'primary-light': '#D946EF',
-				'primary-dark': '#7C3AED',
-				'accent-orange': '#F97316',
-				'accent-blue': '#0EA5E9',
+				'primary-light': '#d5b8d8',
+				'primary-dark': '#a675a8',
+				'accent-cream': '#f9f6e4',
+				'accent-blue': '#709bb3',
+				'accent-light-blue': '#c0d0e4',
 				'neutral': '#ebebeb',
 				'neutral-dark': '#333333',
 				border: 'hsl(var(--border))',

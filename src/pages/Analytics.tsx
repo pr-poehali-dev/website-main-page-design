@@ -55,8 +55,8 @@ const Analytics = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50">
-      <header className="bg-white/90 backdrop-blur-sm border-b border-purple-200 sticky top-0 z-10">
+    <div className="min-h-screen bg-gradient-to-br from-accent-cream via-primary-light/20 to-accent-light-blue/30">
+      <header className="bg-white/90 backdrop-blur-sm border-b border-primary-light/30 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -65,7 +65,7 @@ const Analytics = () => {
                   <Icon name="ArrowLeft" size={20} />
                 </Button>
               </Link>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent font-poiret">Аналитика и отчеты</h1>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary-dark to-accent-blue bg-clip-text text-transparent font-poiret">Аналитика и отчеты</h1>
             </div>
             <div className="flex gap-2">
               <Button variant="outline" className="border-purple-200 hover:bg-purple-50 hover:border-purple-600 font-poiret">
@@ -199,7 +199,7 @@ const Analytics = () => {
                       <p className="text-xs text-gray-500">Продано: {product.sales} шт.</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-bold text-purple-600 font-poiret">{product.revenue.toLocaleString()} ₽</p>
+                      <p className="font-bold text-primary-dark font-poiret">{product.revenue.toLocaleString()} ₽</p>
                       <div className="flex items-center gap-1 text-xs text-green-600">
                         <Icon name="TrendingUp" size={12} />
                         {index === 0 ? '+24%' : index === 1 ? '+18%' : index === 2 ? '+15%' : index === 3 ? '+12%' : '+9%'}
@@ -214,8 +214,8 @@ const Analytics = () => {
 
         <Card className="mt-6">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Icon name="Target" size={24} className="text-primary" />
+            <CardTitle className="flex items-center gap-2 font-poiret">
+              <Icon name="Target" size={24} className="text-primary-dark" />
               Ключевые метрики
             </CardTitle>
           </CardHeader>
@@ -223,23 +223,23 @@ const Analytics = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="space-y-2">
                 <p className="text-sm text-gray-600">Конверсия</p>
-                <p className="text-3xl font-bold text-purple-600 font-poiret">3.8%</p>
+                <p className="text-3xl font-bold text-primary-dark font-poiret">3.8%</p>
                 <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-purple-600 to-pink-600" style={{ width: '38%' }}></div>
+                  <div className="h-full bg-gradient-primary" style={{ width: '38%' }}></div>
                 </div>
               </div>
               <div className="space-y-2">
                 <p className="text-sm text-gray-600">Возврат клиентов</p>
-                <p className="text-3xl font-bold text-pink-600 font-poiret">42%</p>
+                <p className="text-3xl font-bold text-accent-blue font-poiret">42%</p>
                 <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-purple-600 to-pink-600" style={{ width: '42%' }}></div>
+                  <div className="h-full bg-gradient-primary" style={{ width: '42%' }}></div>
                 </div>
               </div>
               <div className="space-y-2">
                 <p className="text-sm text-gray-600">Средний рейтинг</p>
-                <p className="text-3xl font-bold text-orange-600 font-poiret">4.7/5</p>
+                <p className="text-3xl font-bold text-primary-light font-poiret">4.7/5</p>
                 <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-purple-600 to-pink-600" style={{ width: '94%' }}></div>
+                  <div className="h-full bg-gradient-primary" style={{ width: '94%' }}></div>
                 </div>
               </div>
             </div>

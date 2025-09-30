@@ -15,10 +15,10 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 271 91% 65%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 295 28% 79%;
+    --primary-foreground: 0 0% 20%;
 
-    --secondary: 262 83% 58%;
+    --secondary: 295 20% 66%;
     --secondary-foreground: 0 0% 100%;
 
     --muted: 210 40% 96.1%;
@@ -124,20 +124,20 @@
   }
 
   .gradient-primary {
-    background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
+    background: linear-gradient(135deg, #a675a8 0%, #d5b8d8 100%);
   }
 
   .gradient-animated {
-    background: linear-gradient(270deg, #8b5cf6, #d946ef, #f97316);
+    background: linear-gradient(270deg, #a675a8, #d5b8d8, #709bb3);
     background-size: 600% 600%;
     animation: gradient-shift 8s ease infinite;
   }
 
   .gradient-header {
-    background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 50%, #d946ef 100%);
+    background: linear-gradient(135deg, #a675a8 0%, #d5b8d8 50%, #c0d0e4 100%);
   }
 
   .gradient-sidebar {
-    background: linear-gradient(180deg, #6d28d9 0%, #7c3aed 100%);
+    background: linear-gradient(180deg, #a675a8 0%, #d5b8d8 100%);
   }
 }

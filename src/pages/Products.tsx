@@ -31,8 +31,8 @@ const Products = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50">
-      <header className="bg-white/90 backdrop-blur-sm border-b border-purple-200 sticky top-0 z-10">
+    <div className="min-h-screen bg-gradient-to-br from-accent-cream via-primary-light/20 to-accent-light-blue/30">
+      <header className="bg-white/90 backdrop-blur-sm border-b border-primary-light/30 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -41,9 +41,9 @@ const Products = () => {
                   <Icon name="ArrowLeft" size={20} />
                 </Button>
               </Link>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent font-poiret">Управление товарами</h1>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary-dark to-accent-blue bg-clip-text text-transparent font-poiret">Управление товарами</h1>
             </div>
-            <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-poiret shadow-lg">
+            <Button className="bg-gradient-primary hover:opacity-90 text-white font-poiret shadow-lg">
               <Icon name="Plus" size={20} className="mr-2" />
               Добавить товар
             </Button>
@@ -63,7 +63,7 @@ const Products = () => {
               className="pl-10"
             />
           </div>
-          <Button variant="outline" className="border-purple-200 hover:bg-purple-50 hover:border-purple-600 font-poiret">
+          <Button variant="outline" className="border-primary-light/50 hover:bg-primary-light/20 hover:border-primary-dark font-poiret">
             <Icon name="Filter" size={20} className="mr-2" />
             Фильтры
           </Button>
@@ -86,7 +86,7 @@ const Products = () => {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-600">Цена:</span>
-                    <span className="text-lg font-bold text-purple-600">{product.price.toLocaleString()} ₽</span>
+                    <span className="text-lg font-bold text-primary-dark">{product.price.toLocaleString()} ₽</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-600">В наличии:</span>
@@ -95,11 +95,11 @@ const Products = () => {
                     </span>
                   </div>
                   <div className="flex gap-2 pt-2">
-                    <Button variant="outline" size="sm" className="flex-1 border-purple-200 hover:bg-purple-50 hover:border-purple-600 font-poiret">
+                    <Button variant="outline" size="sm" className="flex-1 border-primary-light/50 hover:bg-primary-light/20 hover:border-primary-dark font-poiret">
                       <Icon name="Edit" size={16} className="mr-1" />
                       Изменить
                     </Button>
-                    <Button variant="outline" size="sm" className="flex-1 border-pink-200 hover:bg-pink-50 hover:border-pink-600 font-poiret">
+                    <Button variant="outline" size="sm" className="flex-1 border-primary-light/50 hover:bg-primary-light/20 hover:border-accent-blue font-poiret">
                       <Icon name="Trash2" size={16} className="mr-1" />
                       Удалить
                     </Button>
