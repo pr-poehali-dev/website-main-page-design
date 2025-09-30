@@ -69,7 +69,7 @@ const Login = () => {
               <div className="flex items-center justify-between">
                 <Button
                   type="submit"
-                  className="bg-gradient-primary hover:opacity-90 text-white px-8 font-poiret shadow-lg">
+                  className="bg-gradient-primary hover:opacity-90 text-white px-8 font-poiret shadow-lg"
                 >
                   Войти
                 </Button>
