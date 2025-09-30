@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -7,13 +7,23 @@ import { Switch } from '@/components/ui/switch';
 import Icon from '@/components/ui/icon';
 import { Link } from 'react-router-dom';
 
+const API_URL = 'https://functions.poehali.dev/9f11f70c-7220-45b8-849f-375ef1e6c2e4';
+
 const GeneralSettings = () => {
-  const [email, setEmail] = useState('spirid.iv@yandex.ru');
-  const [phone] = useState('+79086668824');
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState<'success' | 'error'>('success');
+  
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [phoneVerified, setPhoneVerified] = useState(false);
+  const [telegramAccount, setTelegramAccount] = useState('');
+  const [telegramConnected, setTelegramConnected] = useState(false);
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [oldPassword, setOldPassword] = useState('');
-  const [domain, setDomain] = useState('balooirk.ru');
+  const [domain, setDomain] = useState('');
+  const [domainConnected, setDomainConnected] = useState(false);
   const [sitemapEnabled, setSitemapEnabled] = useState(true);
   const [imageQuality, setImageQuality] = useState('90');
   const [watermarkPosition, setWatermarkPosition] = useState('5');
@@ -22,6 +32,220 @@ const GeneralSettings = () => {
   const [itemsPerPage, setItemsPerPage] = useState('100');
   const [notifyOrders, setNotifyOrders] = useState(true);
   const [notifyMessages, setNotifyMessages] = useState(true);
+
+  // Загрузка настроек при монтировании компонента
+  useEffect(() => {
+    loadSettings();
+  }, []);
+
+  const loadSettings = async () => {
+    try {
+      const response = await fetch(API_URL);
+      const data = await response.json();
+      
+      setEmail(data.email || '');
+      setPhone(data.phone || '');
+      setPhoneVerified(data.phone_verified || false);
+      setTelegramAccount(data.telegram_account || '');
+      setTelegramConnected(data.telegram_connected || false);
+      setDomain(data.domain || '');
+      setDomainConnected(data.domain_connected || false);
+      setSitemapEnabled(data.sitemap_enabled || false);
+      setImageQuality(String(data.image_quality || 90));
+      setWatermarkPosition(String(data.watermark_position || '0'));
+      setAuthMethod(String(data.auth_method || '0'));
+      setTimezone(data.timezone || 'Europe/Moscow');
+      setItemsPerPage(String(data.items_per_page || 100));
+      setNotifyOrders(data.notify_orders || false);
+      setNotifyMessages(data.notify_messages || false);
+    } catch (error) {
+      showMessage('Ошибка загрузки настроек', 'error');
+    }
+  };
+
+  const showMessage = (text: string, type: 'success' | 'error') => {
+    setMessage(text);
+    setMessageType(type);
+    setTimeout(() => setMessage(''), 3000);
+  };
+
+  const saveAccountSettings = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'account', email })
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        showMessage(data.message, 'success');
+      } else {
+        showMessage(data.message, 'error');
+      }
+    } catch (error) {
+      showMessage('Ошибка сохранения настроек', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const changePassword = async () => {
+    if (newPassword !== confirmPassword) {
+      showMessage('Пароли не совпадают', 'error');
+      return;
+    }
+    
+    setLoading(true);
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          type: 'password', 
+          new_password: newPassword,
+          old_password: oldPassword 
+        })
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        showMessage(data.message, 'success');
+        setNewPassword('');
+        setConfirmPassword('');
+        setOldPassword('');
+      } else {
+        showMessage(data.message, 'error');
+      }
+    } catch (error) {
+      showMessage('Ошибка смены пароля', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const saveAuthSettings = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'auth', auth_method: authMethod })
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        showMessage(data.message, 'success');
+      } else {
+        showMessage(data.message, 'error');
+      }
+    } catch (error) {
+      showMessage('Ошибка сохранения настроек', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const saveSitemapSettings = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'sitemap', sitemap_enabled: sitemapEnabled })
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        showMessage(data.message, 'success');
+      } else {
+        showMessage(data.message, 'error');
+      }
+    } catch (error) {
+      showMessage('Ошибка сохранения настроек', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const saveImageSettings = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          type: 'images', 
+          quality: parseInt(imageQuality),
+          watermark_position: watermarkPosition 
+        })
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        showMessage(data.message, 'success');
+      } else {
+        showMessage(data.message, 'error');
+      }
+    } catch (error) {
+      showMessage('Ошибка сохранения настроек', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const savePanelSettings = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          type: 'panel',
+          items_per_page: parseInt(itemsPerPage),
+          notify_orders: notifyOrders,
+          notify_messages: notifyMessages,
+          timezone: timezone
+        })
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        showMessage(data.message, 'success');
+      } else {
+        showMessage(data.message, 'error');
+      }
+    } catch (error) {
+      showMessage('Ошибка сохранения настроек', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const disconnectTelegram = async () => {
+    if (!confirm('Действительно отвязать Telegram аккаунт?')) return;
+    
+    setLoading(true);
+    try {
+      const response = await fetch(`${API_URL}?action=telegram`, {
+        method: 'DELETE'
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        showMessage(data.message, 'success');
+        setTelegramConnected(false);
+        setTelegramAccount('');
+      } else {
+        showMessage(data.message, 'error');
+      }
+    } catch (error) {
+      showMessage('Ошибка отвязки Telegram', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const [activeSubmenu, setActiveSubmenu] = useState('conf');
 
@@ -56,6 +280,13 @@ const GeneralSettings = () => {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Message notification */}
+        {message && (
+          <div className={`mb-4 p-4 rounded-lg ${messageType === 'success' ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200'}`}>
+            {message}
+          </div>
+        )}
+
         {/* Submenu */}
         <div className="flex flex-wrap gap-2 mb-6 bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-primary-light/30">
           {submenuItems.map((item) => (
@@ -105,10 +336,14 @@ const GeneralSettings = () => {
                   disabled
                   className="border-primary-light/50 font-poiret text-neutral-dark/70"
                 />
-                <span className="text-sm text-green-600">номер подтвержден</span>
+                {phoneVerified && <span className="text-sm text-green-600">номер подтвержден</span>}
               </div>
-              <Button className="bg-gradient-primary hover:opacity-90 text-white font-poiret">
-                Сохранить
+              <Button 
+                onClick={saveAccountSettings}
+                disabled={loading}
+                className="bg-gradient-primary hover:opacity-90 text-white font-poiret disabled:opacity-50"
+              >
+                {loading ? 'Сохранение...' : 'Сохранить'}
               </Button>
             </CardContent>
           </Card>
@@ -152,8 +387,12 @@ const GeneralSettings = () => {
                   className="border-primary-light/50 focus:border-primary-dark font-poiret"
                 />
               </div>
-              <Button className="bg-gradient-primary hover:opacity-90 text-white font-poiret">
-                Сохранить
+              <Button 
+                onClick={changePassword}
+                disabled={loading}
+                className="bg-gradient-primary hover:opacity-90 text-white font-poiret disabled:opacity-50"
+              >
+                {loading ? 'Сохранение...' : 'Сохранить'}
               </Button>
             </CardContent>
           </Card>
@@ -181,8 +420,12 @@ const GeneralSettings = () => {
                   <option value="4">Google Authenticator</option>
                 </select>
               </div>
-              <Button className="bg-gradient-primary hover:opacity-90 text-white font-poiret">
-                Сохранить
+              <Button 
+                onClick={saveAuthSettings}
+                disabled={loading}
+                className="bg-gradient-primary hover:opacity-90 text-white font-poiret disabled:opacity-50"
+              >
+                {loading ? 'Сохранение...' : 'Сохранить'}
               </Button>
             </CardContent>
           </Card>
@@ -200,7 +443,14 @@ const GeneralSettings = () => {
                 <Label className="font-poiret">Аккаунт в Telegram</Label>
                 <div className="text-neutral-dark">
                   Воздушные шары и сувениры Иркутск (balooirk38){' '}
-                  <a href="#" className="text-primary-dark hover:text-accent-blue font-poiret">
+                  <a 
+                    href="#" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      disconnectTelegram();
+                    }}
+                    className="text-primary-dark hover:text-accent-blue font-poiret"
+                  >
                     отвязать
                   </a>
                 </div>
@@ -278,8 +528,12 @@ const GeneralSettings = () => {
                   </p>
                 </div>
               )}
-              <Button className="bg-gradient-primary hover:opacity-90 text-white font-poiret">
-                Сохранить
+              <Button 
+                onClick={saveSitemapSettings}
+                disabled={loading}
+                className="bg-gradient-primary hover:opacity-90 text-white font-poiret disabled:opacity-50"
+              >
+                {loading ? 'Сохранение...' : 'Сохранить'}
               </Button>
             </CardContent>
           </Card>
@@ -318,8 +572,12 @@ const GeneralSettings = () => {
                   className="border-primary-light/50 focus:border-primary-dark font-poiret"
                 />
               </div>
-              <Button className="bg-gradient-primary hover:opacity-90 text-white font-poiret">
-                Сохранить
+              <Button 
+                onClick={saveImageSettings}
+                disabled={loading}
+                className="bg-gradient-primary hover:opacity-90 text-white font-poiret disabled:opacity-50"
+              >
+                {loading ? 'Сохранение...' : 'Сохранить'}
               </Button>
             </CardContent>
           </Card>
@@ -376,8 +634,12 @@ const GeneralSettings = () => {
                   <option value="Asia/Yekaterinburg">Asia/Yekaterinburg</option>
                 </select>
               </div>
-              <Button className="bg-gradient-primary hover:opacity-90 text-white font-poiret">
-                Сохранить
+              <Button 
+                onClick={savePanelSettings}
+                disabled={loading}
+                className="bg-gradient-primary hover:opacity-90 text-white font-poiret disabled:opacity-50"
+              >
+                {loading ? 'Сохранение...' : 'Сохранить'}
               </Button>
             </CardContent>
           </Card>
