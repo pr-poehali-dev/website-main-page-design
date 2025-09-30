@@ -64,7 +64,7 @@ const Header = () => {
             </Button>
             <Button 
               className="bg-primary hover:bg-primary-dark text-white"
-              onClick={() => window.location.href = '/#create-account'}
+              onClick={() => window.location.href = '/website-builder'}
             >
               Создать магазин
             </Button>
@@ -104,7 +104,7 @@ const Header = () => {
                   </Button>
                   <Button 
                     className="w-full bg-primary hover:bg-primary-dark text-white"
-                    onClick={() => window.location.href = '/#create-account'}
+                    onClick={() => window.location.href = '/website-builder'}
                   >
                     Создать магазин
                   </Button>

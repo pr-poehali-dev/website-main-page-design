@@ -103,7 +103,7 @@ const Login = () => {
             <div className="mt-6 text-center">
               <p className="text-sm text-neutral-dark/70">
                 Нет аккаунта?{' '}
-                <a href="/#create-account" className="text-primary hover:text-primary-dark font-medium transition-colors">
+                <a href="/website-builder" className="text-primary hover:text-primary-dark font-medium transition-colors">
                   Создать магазин
                 </a>
               </p>
