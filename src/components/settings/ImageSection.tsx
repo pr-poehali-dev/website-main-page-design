@@ -60,6 +60,9 @@ const ImageSection = ({
         <CardContent className="space-y-4">
           <div>
             <Label htmlFor="watermarkPosition">Водяной знак</Label>
+            <p className="text-sm text-gray-600 mt-1 mb-2">
+              Изображение, которое автоматически наносится поверх всех фотографий на сайте для их защиты от копирования. Рекомендуется использовать полупрозрачную картинку в формате PNG.
+            </p>
             <Select value={watermarkPosition} onValueChange={setWatermarkPosition}>
               <SelectTrigger>
                 <SelectValue />
@@ -83,17 +86,25 @@ const ImageSection = ({
               {watermarkPreview && (
                 <div>
                   <Label>Текущий водяной знак</Label>
-                  <img src={watermarkPreview} alt="Watermark" className="mt-2 max-w-xs" />
+                  <img src={watermarkPreview} alt="Watermark" className="mt-2 max-w-xs border rounded" />
                 </div>
               )}
               <div>
                 <Label htmlFor="watermarkFile">Файл картинки</Label>
+                <p className="text-sm text-gray-600 mt-1 mb-2">
+                  Рекомендуется делать полупрозрачную картинку в формате PNG с прозрачным фоном
+                </p>
                 <Input
                   id="watermarkFile"
                   type="file"
-                  accept="image/*"
+                  accept="image/png,image/jpeg,image/jpg,image/webp"
                   onChange={(e) => setWatermarkFile(e.target.files?.[0] || null)}
                 />
+                {watermarkFile && (
+                  <p className="text-sm text-green-600 mt-2">
+                    ✓ Выбран файл: {watermarkFile.name}
+                  </p>
+                )}
               </div>
               <div className="flex gap-4">
                 <div className="flex-1">
@@ -103,6 +114,7 @@ const ImageSection = ({
                     type="number"
                     value={watermarkMinWidth}
                     onChange={(e) => setWatermarkMinWidth(e.target.value)}
+                    placeholder="0"
                   />
                 </div>
                 <div className="flex-1">
@@ -112,13 +124,20 @@ const ImageSection = ({
                     type="number"
                     value={watermarkMinHeight}
                     onChange={(e) => setWatermarkMinHeight(e.target.value)}
+                    placeholder="0"
                   />
                 </div>
               </div>
+              <p className="text-sm text-gray-600">
+                Водяной знак будет наноситься, если фото больше этих размеров и больше картинки со знаком
+              </p>
             </>
           )}
           <div>
             <Label htmlFor="imageQuality">Качество (1-100)</Label>
+            <p className="text-sm text-gray-600 mt-1 mb-2">
+              Чем ниже качество, тем меньше вес картинок. Оптимальное значение = 80-90
+            </p>
             <Input
               id="imageQuality"
               type="number"
@@ -133,7 +152,12 @@ const ImageSection = ({
               checked={webpEnabled}
               onCheckedChange={setWebpEnabled}
             />
-            <Label>Формат WebP включен</Label>
+            <div className="flex-1">
+              <Label>Формат WebP включен</Label>
+              <p className="text-sm text-gray-600 mt-1">
+                Современный формат изображений для веб-сайтов с уменьшением размера без потери качества
+              </p>
+            </div>
           </div>
           <Button onClick={onSave} disabled={loading}>
             {loading ? 'Сохранение...' : 'Сохранить'}

@@ -39,8 +39,15 @@ const AuthSection = ({
       </CardHeader>
       {!collapsed && (
         <CardContent className="space-y-4">
+          <p className="text-sm text-gray-600 bg-blue-50 p-3 rounded-lg">
+            Авторизация в два этапа: после введения логина и пароля будет запрошен одноразовый код авторизации по SMS, емейл или другим способом
+          </p>
+          
           <div>
             <Label htmlFor="authMethod">Основной метод</Label>
+            <p className="text-sm text-gray-600 mt-1 mb-2">
+              Метод получения кода авторизации по умолчанию
+            </p>
             <Select value={authMethod} onValueChange={setAuthMethod}>
               <SelectTrigger>
                 <SelectValue />
@@ -54,39 +61,84 @@ const AuthSection = ({
               </SelectContent>
             </Select>
           </div>
+          
           <div>
             <Label>Методы авторизации</Label>
-            <div className="space-y-2 mt-2">
-              <div className="flex items-center space-x-2">
-                <Switch
-                  checked={authMethods.includes('1')}
-                  onCheckedChange={(checked) => onAuthMethodToggle('1', checked)}
-                />
-                <Label>Код по SMS</Label>
+            <p className="text-sm text-gray-600 mt-1 mb-3">
+              Доступные способы получения кода для двухэтапной авторизации
+            </p>
+            
+            <div className="space-y-3">
+              <div className="border rounded-lg p-3">
+                <div className="flex items-center space-x-2 mb-2">
+                  <Switch
+                    checked={authMethods.includes('1')}
+                    onCheckedChange={(checked) => onAuthMethodToggle('1', checked)}
+                  />
+                  <Label>Код по SMS</Label>
+                </div>
+                {authMethods.includes('1') && (
+                  <p className="text-sm text-gray-600 ml-11">
+                    Для подключения необходимо подтвердить номер мобильного телефона. SMS с кодами платные.
+                  </p>
+                )}
               </div>
-              <div className="flex items-center space-x-2">
-                <Switch
-                  checked={authMethods.includes('2')}
-                  onCheckedChange={(checked) => onAuthMethodToggle('2', checked)}
-                />
-                <Label>Код на емейл</Label>
+              
+              <div className="border rounded-lg p-3">
+                <div className="flex items-center space-x-2 mb-2">
+                  <Switch
+                    checked={authMethods.includes('2')}
+                    onCheckedChange={(checked) => onAuthMethodToggle('2', checked)}
+                  />
+                  <Label>Код на емейл</Label>
+                </div>
+                {authMethods.includes('2') && (
+                  <p className="text-sm text-gray-600 ml-11">
+                    Коды авторизации будут приходить на емейл администратора
+                  </p>
+                )}
               </div>
-              <div className="flex items-center space-x-2">
-                <Switch
-                  checked={authMethods.includes('3')}
-                  onCheckedChange={(checked) => onAuthMethodToggle('3', checked)}
-                />
-                <Label>Код в Telegram</Label>
+              
+              <div className="border rounded-lg p-3">
+                <div className="flex items-center space-x-2 mb-2">
+                  <Switch
+                    checked={authMethods.includes('3')}
+                    onCheckedChange={(checked) => onAuthMethodToggle('3', checked)}
+                  />
+                  <Label>Код в Telegram</Label>
+                </div>
+                {authMethods.includes('3') && (
+                  <p className="text-sm text-gray-600 ml-11">
+                    Коды будут приходить от специального бота в Telegram. Необходимо включить уведомления в Telegram.
+                  </p>
+                )}
               </div>
-              <div className="flex items-center space-x-2">
-                <Switch
-                  checked={authMethods.includes('4')}
-                  onCheckedChange={(checked) => onAuthMethodToggle('4', checked)}
-                />
-                <Label>Google Authenticator</Label>
+              
+              <div className="border rounded-lg p-3">
+                <div className="flex items-center space-x-2 mb-2">
+                  <Switch
+                    checked={authMethods.includes('4')}
+                    onCheckedChange={(checked) => onAuthMethodToggle('4', checked)}
+                  />
+                  <Label>Google Authenticator</Label>
+                </div>
+                {authMethods.includes('4') && (
+                  <div className="text-sm text-gray-600 ml-11 space-y-2">
+                    <p>Коды авторизации будут отображаться в мобильном приложении Google Authenticator</p>
+                    <a 
+                      href="https://support.google.com/accounts/answer/1066447?hl=ru" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline inline-block"
+                    >
+                      Инструкция по установке Google Authenticator →
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
           </div>
+          
           <Button onClick={onSave} disabled={loading}>
             {loading ? 'Сохранение...' : 'Сохранить'}
           </Button>
