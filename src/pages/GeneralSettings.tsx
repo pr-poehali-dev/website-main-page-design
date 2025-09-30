@@ -10,7 +10,6 @@ import Icon from '@/components/ui/icon';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { fetchWithAuth } from '@/utils/api';
-import SettingsNav from '@/components/SettingsNav';
 
 const API_URL = 'https://functions.poehali.dev/9f11f70c-7220-45b8-849f-375ef1e6c2e4';
 
@@ -522,8 +521,7 @@ const GeneralSettings = () => {
             <Icon name="ArrowLeft" size={20} />
             Назад к дашборду
           </Link>
-          <h1 className="text-3xl font-bold mb-4">Настройки</h1>
-          <SettingsNav />
+          <h1 className="text-3xl font-bold">Общие настройки</h1>
         </div>
 
         {message && (
