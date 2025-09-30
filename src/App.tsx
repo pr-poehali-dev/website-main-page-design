@@ -10,6 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import Products from "./pages/Products";
 import Orders from "./pages/Orders";
 import Settings from "./pages/Settings";
+import GeneralSettings from "./pages/GeneralSettings";
 import Analytics from "./pages/Analytics";
 import NotFound from "./pages/NotFound";
 
@@ -28,6 +29,7 @@ const App = () => (
           <Route path="/products" element={<Products />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/general-settings" element={<GeneralSettings />} />
           <Route path="/analytics" element={<Analytics />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

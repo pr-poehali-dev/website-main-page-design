@@ -26,7 +26,7 @@ const Dashboard = () => {
       title: 'Главная',
       icon: 'Home',
       items: [
-        { title: 'Общие настройки', link: '/settings' },
+        { title: 'Общие настройки', link: '/general-settings' },
         { title: 'Страницы сайта', link: '/dashboard/pages' },
         { title: 'Меню сайта', link: '/dashboard/menu' },
         { title: 'Файлы', link: '/dashboard/files' },
