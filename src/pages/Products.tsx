@@ -187,13 +187,22 @@ const Products = () => {
               <h1 className="text-2xl font-poiret font-bold text-primary">Управление товарами</h1>
             </div>
 
-            <Button
-              className="bg-gradient-primary text-white hover:opacity-90"
-              onClick={() => setIsAddDialogOpen(true)}
-            >
-              <Icon name="Plus" size={16} className="mr-2" />
-              Добавить товар
-            </Button>
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="outline"
+                onClick={() => window.location.href = '/categories'}
+              >
+                <Icon name="FolderOpen" size={16} className="mr-2" />
+                Категории
+              </Button>
+              <Button
+                className="bg-gradient-primary text-white hover:opacity-90"
+                onClick={() => setIsAddDialogOpen(true)}
+              >
+                <Icon name="Plus" size={16} className="mr-2" />
+                Добавить товар
+              </Button>
+            </div>
           </div>
         </div>
       </header>
