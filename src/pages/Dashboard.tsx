@@ -183,7 +183,7 @@ const Dashboard = () => {
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar */}
       <aside 
-        className={`fixed left-0 top-0 h-full bg-[#313d52] text-white transition-all duration-300 z-20 ${
+        className={`fixed left-0 top-0 h-full gradient-sidebar text-white transition-all duration-300 z-20 shadow-2xl ${
           sidebarOpen ? 'w-64' : 'w-0'
         } overflow-hidden`}
       >
@@ -216,12 +216,12 @@ const Dashboard = () => {
                   />
                 </button>
                 {openMenus.includes(menu.id) && (
-                  <div className="bg-[#2a3544]">
+                  <div className="bg-primary-dark/30">
                     {menu.items.map((item, idx) => (
                       <a
                         key={idx}
                         href={item.link}
-                        className="block px-4 py-2.5 pl-12 text-sm text-gray-300 hover:bg-white/5 hover:text-white transition-colors"
+                        className="block px-4 py-2.5 pl-12 text-sm text-gray-200 hover:bg-white/10 hover:text-white transition-colors"
                       >
                         {item.title}
                       </a>
@@ -233,7 +233,7 @@ const Dashboard = () => {
           </nav>
 
           {/* Info Block */}
-          <div className="absolute bottom-0 w-64 bg-[#2a3544] border-t border-white/10 p-4 text-sm">
+          <div className="absolute bottom-0 w-64 bg-primary-dark/40 border-t border-white/10 p-4 text-sm">
             <p className="font-semibold mb-2 text-gray-300">Информация</p>
             <p className="mb-1">
               <a href="/orders" className="text-gray-400 hover:text-white">
@@ -253,7 +253,7 @@ const Dashboard = () => {
             </p>
             <p className="text-red-400 text-xs mb-2">Необходимо пополнить счет</p>
             <p className="mb-3">
-              <a href="/dashboard/payment" className="text-[#26A69A] hover:text-[#2bbaaa] text-xs">
+              <a href="/dashboard/payment" className="text-accent-orange hover:text-accent-orange/80 text-xs font-semibold">
                 Пополнить счет
               </a>
             </p>
@@ -268,7 +268,7 @@ const Dashboard = () => {
       {/* Main Content */}
       <div className={`flex-1 transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-0'}`}>
         {/* Header */}
-        <header className="bg-[#2c4161] text-white shadow-md sticky top-0 z-10">
+        <header className="gradient-header text-white shadow-lg sticky top-0 z-10">
           <div className="px-4">
             <div className="flex items-center justify-between h-12">
               <div className="flex items-center space-x-4">
@@ -276,11 +276,11 @@ const Dashboard = () => {
                   variant="ghost"
                   size="sm"
                   onClick={() => setSidebarOpen(!sidebarOpen)}
-                  className="text-white hover:bg-white/10 h-12 px-3 border-r border-[#455a79]"
+                  className="text-white hover:bg-white/10 h-12 px-3 border-r border-white/20"
                 >
                   <Icon name="Menu" size={20} />
                 </Button>
-                <div className="text-sm text-[#9bb3cd]">
+                <div className="text-sm text-white/70">
                   {ordersCount > 0 ? (
                     <span>
                       <a href="/orders" className="text-white hover:underline">Новых заказов: {ordersCount}</a>
@@ -293,30 +293,30 @@ const Dashboard = () => {
 
               <div className="flex items-center space-x-4">
                 <div className="text-sm">
-                  <span className="text-[#9bb3cd]">Магазин</span>{' '}
+                  <span className="text-white/80">Магазин</span>{' '}
                   <a href="https://balooirk.ru" target="_blank" className="text-white hover:underline">
                     balooirk.ru
                   </a>
                 </div>
                 <div className="text-sm">
                   <span className="text-white">на счету: </span>
-                  <a href="/dashboard/payment" className="text-[#3ABEE8] hover:underline">
+                  <a href="/dashboard/payment" className="text-accent-blue hover:underline">
                     {balance} руб
                   </a>
                   <a 
                     href="/dashboard/payment" 
-                    className="ml-2 px-2 py-1 bg-red-600 text-white text-xs hover:bg-red-700 rounded"
+                    className="ml-2 px-2 py-1 bg-accent-orange text-white text-xs hover:bg-accent-orange/90 rounded shadow-md"
                   >
                     пополнить
                   </a>
                 </div>
                 <button
                   onClick={() => setShowStepsHelp(!showStepsHelp)}
-                  className="text-[#9bb3cd] hover:text-white text-sm"
+                  className="text-white/80 hover:text-white text-sm"
                 >
                   Инструкция
                 </button>
-                <a href="/" className="text-[#9bb3cd] hover:text-white text-sm">
+                <a href="/" className="text-white/80 hover:text-white text-sm">
                   Выход
                 </a>
               </div>
@@ -340,10 +340,10 @@ const Dashboard = () => {
                         onClick={() => setCurrentStep(step.step)}
                         className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all ${
                           currentStep === step.step
-                            ? 'bg-blue-600 text-white ring-2 ring-blue-300'
+                            ? 'bg-accent-blue text-white ring-2 ring-accent-blue/30 shadow-lg'
                             : step.completed
                             ? 'bg-green-500 text-white'
-                            : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                            : 'bg-gray-200 text-gray-600 hover:bg-primary-light hover:text-white'
                         }`}
                       >
                         {step.completed ? '✓' : step.step}
