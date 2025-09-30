@@ -55,10 +55,17 @@ const Header = () => {
           </div>
           
           <div className="hidden md:flex items-center space-x-3">
-            <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white">
+            <Button 
+              variant="outline" 
+              className="border-primary text-primary hover:bg-primary hover:text-white"
+              onClick={() => window.location.href = '/login'}
+            >
               Вход
             </Button>
-            <Button className="bg-primary hover:bg-primary-dark text-white">
+            <Button 
+              className="bg-primary hover:bg-primary-dark text-white"
+              onClick={() => window.location.href = '/#create-account'}
+            >
               Создать магазин
             </Button>
           </div>
@@ -88,8 +95,19 @@ const Header = () => {
                 </Accordion>
                 <a href="#pricing" className="text-lg font-medium text-neutral-dark hover:text-primary">Тарифы</a>
                 <div className="flex flex-col space-y-2 pt-4">
-                  <Button variant="outline" className="w-full border-primary text-primary">Вход</Button>
-                  <Button className="w-full bg-primary hover:bg-primary-dark text-white">Создать магазин</Button>
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-primary text-primary"
+                    onClick={() => window.location.href = '/login'}
+                  >
+                    Вход
+                  </Button>
+                  <Button 
+                    className="w-full bg-primary hover:bg-primary-dark text-white"
+                    onClick={() => window.location.href = '/#create-account'}
+                  >
+                    Создать магазин
+                  </Button>
                 </div>
               </div>
             </SheetContent>
