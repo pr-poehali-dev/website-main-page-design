@@ -20,10 +20,7 @@ export default {
 		extend: {
 			colors: {
 				'primary-light': '#d5b8d8',
-				'primary-dark': '#a675a8',
-				'accent-cream': '#f9f6e4',
-				'accent-blue': '#709bb3',
-				'accent-light-blue': '#c0d0e4',
+				'primary-dark': '#8a5c8c',
 				'neutral': '#ebebeb',
 				'neutral-dark': '#333333',
 				border: 'hsl(var(--border))',

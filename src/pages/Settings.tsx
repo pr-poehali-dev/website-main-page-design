@@ -19,8 +19,8 @@ const Settings = () => {
   const [maintenanceMode, setMaintenanceMode] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-accent-cream via-primary-light/20 to-accent-light-blue/30">
-      <header className="bg-white/90 backdrop-blur-sm border-b border-primary-light/30 sticky top-0 z-10">
+    <div className="min-h-screen bg-gradient-to-br from-neutral via-secondary to-primary-light">
+      <header className="bg-white/90 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -29,9 +29,9 @@ const Settings = () => {
                   <Icon name="ArrowLeft" size={20} />
                 </Button>
               </Link>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary-dark to-accent-blue bg-clip-text text-transparent font-poiret">Настройки</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Настройки</h1>
             </div>
-            <Button className="bg-gradient-primary hover:opacity-90 text-white font-poiret shadow-lg">
+            <Button className="bg-primary hover:bg-primary/90">
               <Icon name="Save" size={20} className="mr-2" />
               Сохранить изменения
             </Button>
@@ -43,8 +43,8 @@ const Settings = () => {
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 font-poiret">
-                <Icon name="Store" size={24} className="text-primary-dark" />
+              <CardTitle className="flex items-center gap-2">
+                <Icon name="Store" size={24} className="text-primary" />
                 Основная информация
               </CardTitle>
               <CardDescription>
@@ -89,7 +89,7 @@ const Settings = () => {
                   id="currency"
                   value={currency}
                   onChange={(e) => setCurrency(e.target.value)}
-                  className="w-full px-3 py-2 border border-primary-light/50 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-dark font-poiret"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                 >
                   <option value="RUB">Российский рубль (₽)</option>
                   <option value="USD">Доллар США ($)</option>
@@ -101,8 +101,8 @@ const Settings = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 font-poiret">
-                <Icon name="Bell" size={24} className="text-accent-blue" />
+              <CardTitle className="flex items-center gap-2">
+                <Icon name="Bell" size={24} className="text-primary" />
                 Уведомления
               </CardTitle>
               <CardDescription>
@@ -137,8 +137,8 @@ const Settings = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 font-poiret">
-                <Icon name="Settings" size={24} className="text-primary-light" />
+              <CardTitle className="flex items-center gap-2">
+                <Icon name="Settings" size={24} className="text-primary" />
                 Системные настройки
               </CardTitle>
               <CardDescription>

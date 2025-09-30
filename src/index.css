@@ -15,11 +15,11 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 295 28% 79%;
-    --primary-foreground: 0 0% 20%;
+    --primary: 295 28% 56%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 295 20% 66%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 48 67% 94%;
+    --secondary-foreground: 0 0% 10%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
@@ -110,12 +110,6 @@
   h6 {
     font-family: "Poiret One", cursive;
   }
-
-  button,
-  a,
-  .font-poiret {
-    font-family: "Poiret One", cursive;
-  }
 }
 
 @layer utilities {
@@ -128,16 +122,8 @@
   }
 
   .gradient-animated {
-    background: linear-gradient(270deg, #a675a8, #d5b8d8, #709bb3);
+    background: linear-gradient(270deg, #a675a8, #d5b8d8, #f9f6e4);
     background-size: 600% 600%;
     animation: gradient-shift 8s ease infinite;
-  }
-
-  .gradient-header {
-    background: linear-gradient(135deg, #a675a8 0%, #d5b8d8 50%, #c0d0e4 100%);
-  }
-
-  .gradient-sidebar {
-    background: linear-gradient(180deg, #a675a8 0%, #d5b8d8 100%);
   }
 }

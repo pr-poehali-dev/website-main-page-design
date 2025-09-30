@@ -41,8 +41,8 @@ const Orders = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-accent-cream via-primary-light/20 to-accent-light-blue/30">
-      <header className="bg-white/90 backdrop-blur-sm border-b border-primary-light/30 sticky top-0 z-10">
+    <div className="min-h-screen bg-gradient-to-br from-neutral via-secondary to-primary-light">
+      <header className="bg-white/90 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -51,10 +51,10 @@ const Orders = () => {
                   <Icon name="ArrowLeft" size={20} />
                 </Button>
               </Link>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary-dark to-accent-blue bg-clip-text text-transparent font-poiret">Заказы</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Заказы</h1>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" className="border-primary-light/50 hover:bg-primary-light/20 hover:border-primary-dark font-poiret">
+              <Button variant="outline">
                 <Icon name="Download" size={20} className="mr-2" />
                 Экспорт
               </Button>
@@ -72,7 +72,7 @@ const Orders = () => {
                   <p className="text-sm text-gray-600">Всего заказов</p>
                   <p className="text-2xl font-bold">{orders.length}</p>
                 </div>
-                <Icon name="ShoppingCart" size={32} className="text-primary-dark" />
+                <Icon name="ShoppingCart" size={32} className="text-primary" />
               </div>
             </CardContent>
           </Card>
@@ -114,7 +114,7 @@ const Orders = () => {
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle className="font-poiret">Список заказов</CardTitle>
+              <CardTitle>Список заказов</CardTitle>
               <div className="flex gap-2">
                 <div className="relative w-64">
                   <Icon name="Search" size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -126,7 +126,7 @@ const Orders = () => {
                     className="pl-10"
                   />
                 </div>
-                <Button variant="outline" className="border-primary-light/50 hover:bg-primary-light/20 hover:border-primary-dark">
+                <Button variant="outline">
                   <Icon name="Filter" size={20} />
                 </Button>
               </div>
