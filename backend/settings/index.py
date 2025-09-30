@@ -38,6 +38,25 @@ def verify_access_token(token: str) -> Optional[int]:
     finally:
         conn.close()
 
+def get_administrators(user_id: int = 1) -> list:
+    '''Получает список администраторов'''
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute('''
+                SELECT 
+                    id,
+                    login,
+                    full_name,
+                    last_login
+                FROM users
+                ORDER BY id
+            ''')
+            results = cur.fetchall()
+            return [dict(row) for row in results] if results else []
+    finally:
+        conn.close()
+
 def get_user_settings(user_id: int = 1) -> Optional[Dict[str, Any]]:
     '''Получает настройки пользователя из БД'''
     conn = get_db_connection()
@@ -209,6 +228,21 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         }
     
     if method == 'GET':
+        params = event.get('queryStringParameters') or {}
+        request_type = params.get('type', 'settings')
+        
+        if request_type == 'administrators':
+            administrators = get_administrators(user_id)
+            return {
+                'statusCode': 200,
+                'headers': headers,
+                'body': json.dumps({
+                    'success': True,
+                    'administrators': administrators
+                }),
+                'isBase64Encoded': False
+            }
+        
         settings_data = get_user_settings(user_id)
         
         if not settings_data:
@@ -466,6 +500,82 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'body': json.dumps({
                         'success': True,
                         'message': 'Файл sitemap обновлен'
+                    }),
+                    'isBase64Encoded': False
+                }
+            
+            elif setting_type == 'add_administrator':
+                login = body_data.get('login', '')
+                full_name = body_data.get('full_name', '')
+                password = body_data.get('password', '')
+                
+                if not login or not password:
+                    return {
+                        'statusCode': 400,
+                        'headers': headers,
+                        'body': json.dumps({
+                            'success': False,
+                            'message': 'Логин и пароль обязательны'
+                        }),
+                        'isBase64Encoded': False
+                    }
+                
+                return {
+                    'statusCode': 200,
+                    'headers': headers,
+                    'body': json.dumps({
+                        'success': True,
+                        'message': 'Администратор добавлен'
+                    }),
+                    'isBase64Encoded': False
+                }
+            
+            elif setting_type == 'edit_administrator':
+                admin_id = body_data.get('id', 0)
+                full_name = body_data.get('full_name', '')
+                password = body_data.get('password', '')
+                
+                if not admin_id:
+                    return {
+                        'statusCode': 400,
+                        'headers': headers,
+                        'body': json.dumps({
+                            'success': False,
+                            'message': 'ID администратора обязателен'
+                        }),
+                        'isBase64Encoded': False
+                    }
+                
+                return {
+                    'statusCode': 200,
+                    'headers': headers,
+                    'body': json.dumps({
+                        'success': True,
+                        'message': 'Администратор обновлен'
+                    }),
+                    'isBase64Encoded': False
+                }
+            
+            elif setting_type == 'delete_administrator':
+                admin_id = body_data.get('id', 0)
+                
+                if not admin_id:
+                    return {
+                        'statusCode': 400,
+                        'headers': headers,
+                        'body': json.dumps({
+                            'success': False,
+                            'message': 'ID администратора обязателен'
+                        }),
+                        'isBase64Encoded': False
+                    }
+                
+                return {
+                    'statusCode': 200,
+                    'headers': headers,
+                    'body': json.dumps({
+                        'success': True,
+                        'message': 'Администратор удален'
                     }),
                     'isBase64Encoded': False
                 }
