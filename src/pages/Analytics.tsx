@@ -32,11 +32,11 @@ const Analytics = () => {
   ];
 
   const categoryData = [
-    { name: 'Электроника', value: 35, color: '#a675a8' },
-    { name: 'Одежда', value: 25, color: '#d5b8d8' },
-    { name: 'Аксессуары', value: 20, color: '#f9f6e4' },
-    { name: 'Косметика', value: 15, color: '#c4a4c6' },
-    { name: 'Прочее', value: 5, color: '#e8dce9' },
+    { name: 'Электроника', value: 35, color: '#8B5CF6' },
+    { name: 'Одежда', value: 25, color: '#D946EF' },
+    { name: 'Аксессуары', value: 20, color: '#F97316' },
+    { name: 'Косметика', value: 15, color: '#EC4899' },
+    { name: 'Прочее', value: 5, color: '#0EA5E9' },
   ];
 
   const topProducts = [
@@ -55,8 +55,8 @@ const Analytics = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral via-secondary to-primary-light">
-      <header className="bg-white/90 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-10">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50">
+      <header className="bg-white/90 backdrop-blur-sm border-b border-purple-200 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -65,14 +65,14 @@ const Analytics = () => {
                   <Icon name="ArrowLeft" size={20} />
                 </Button>
               </Link>
-              <h1 className="text-2xl font-bold text-gray-900">Аналитика и отчеты</h1>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent font-poiret">Аналитика и отчеты</h1>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline">
+              <Button variant="outline" className="border-purple-200 hover:bg-purple-50 hover:border-purple-600 font-poiret">
                 <Icon name="Download" size={20} className="mr-2" />
                 Экспорт
               </Button>
-              <Button variant="outline">
+              <Button variant="outline" className="border-purple-200 hover:bg-purple-50 hover:border-purple-600 font-poiret">
                 <Icon name="Calendar" size={20} className="mr-2" />
                 Период
               </Button>
@@ -103,7 +103,7 @@ const Analytics = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           <Card>
             <CardHeader>
-              <CardTitle>Динамика продаж</CardTitle>
+              <CardTitle className="font-poiret">Динамика продаж</CardTitle>
               <CardDescription>Выручка и количество заказов по месяцам</CardDescription>
             </CardHeader>
             <CardContent>
@@ -119,7 +119,7 @@ const Analytics = () => {
                     yAxisId="left"
                     type="monotone"
                     dataKey="sales"
-                    stroke="#a675a8"
+                    stroke="#8B5CF6"
                     strokeWidth={2}
                     name="Выручка (₽)"
                   />
@@ -127,7 +127,7 @@ const Analytics = () => {
                     yAxisId="right"
                     type="monotone"
                     dataKey="orders"
-                    stroke="#d5b8d8"
+                    stroke="#EC4899"
                     strokeWidth={2}
                     name="Заказов"
                   />
@@ -138,7 +138,7 @@ const Analytics = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle>Продажи по категориям</CardTitle>
+              <CardTitle className="font-poiret">Продажи по категориям</CardTitle>
               <CardDescription>Распределение выручки по категориям товаров</CardDescription>
             </CardHeader>
             <CardContent>
@@ -168,7 +168,7 @@ const Analytics = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card>
             <CardHeader>
-              <CardTitle>Сравнение по месяцам</CardTitle>
+              <CardTitle className="font-poiret">Сравнение по месяцам</CardTitle>
               <CardDescription>Динамика заказов за последние 9 месяцев</CardDescription>
             </CardHeader>
             <CardContent>
@@ -179,7 +179,7 @@ const Analytics = () => {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Bar dataKey="orders" fill="#a675a8" name="Заказов" />
+                  <Bar dataKey="orders" fill="#8B5CF6" name="Заказов" />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
@@ -187,7 +187,7 @@ const Analytics = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle>Топ-5 товаров</CardTitle>
+              <CardTitle className="font-poiret">Топ-5 товаров</CardTitle>
               <CardDescription>Самые продаваемые товары по выручке</CardDescription>
             </CardHeader>
             <CardContent>
@@ -199,7 +199,7 @@ const Analytics = () => {
                       <p className="text-xs text-gray-500">Продано: {product.sales} шт.</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-bold text-primary">{product.revenue.toLocaleString()} ₽</p>
+                      <p className="font-bold text-purple-600 font-poiret">{product.revenue.toLocaleString()} ₽</p>
                       <div className="flex items-center gap-1 text-xs text-green-600">
                         <Icon name="TrendingUp" size={12} />
                         {index === 0 ? '+24%' : index === 1 ? '+18%' : index === 2 ? '+15%' : index === 3 ? '+12%' : '+9%'}
@@ -223,23 +223,23 @@ const Analytics = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="space-y-2">
                 <p className="text-sm text-gray-600">Конверсия</p>
-                <p className="text-3xl font-bold text-primary">3.8%</p>
+                <p className="text-3xl font-bold text-purple-600 font-poiret">3.8%</p>
                 <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                  <div className="h-full bg-primary" style={{ width: '38%' }}></div>
+                  <div className="h-full bg-gradient-to-r from-purple-600 to-pink-600" style={{ width: '38%' }}></div>
                 </div>
               </div>
               <div className="space-y-2">
                 <p className="text-sm text-gray-600">Возврат клиентов</p>
-                <p className="text-3xl font-bold text-primary">42%</p>
+                <p className="text-3xl font-bold text-pink-600 font-poiret">42%</p>
                 <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                  <div className="h-full bg-primary" style={{ width: '42%' }}></div>
+                  <div className="h-full bg-gradient-to-r from-purple-600 to-pink-600" style={{ width: '42%' }}></div>
                 </div>
               </div>
               <div className="space-y-2">
                 <p className="text-sm text-gray-600">Средний рейтинг</p>
-                <p className="text-3xl font-bold text-primary">4.7/5</p>
+                <p className="text-3xl font-bold text-orange-600 font-poiret">4.7/5</p>
                 <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                  <div className="h-full bg-primary" style={{ width: '94%' }}></div>
+                  <div className="h-full bg-gradient-to-r from-purple-600 to-pink-600" style={{ width: '94%' }}></div>
                 </div>
               </div>
             </div>

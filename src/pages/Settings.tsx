@@ -19,8 +19,8 @@ const Settings = () => {
   const [maintenanceMode, setMaintenanceMode] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral via-secondary to-primary-light">
-      <header className="bg-white/90 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-10">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50">
+      <header className="bg-white/90 backdrop-blur-sm border-b border-purple-200 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -29,9 +29,9 @@ const Settings = () => {
                   <Icon name="ArrowLeft" size={20} />
                 </Button>
               </Link>
-              <h1 className="text-2xl font-bold text-gray-900">Настройки</h1>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent font-poiret">Настройки</h1>
             </div>
-            <Button className="bg-primary hover:bg-primary/90">
+            <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-poiret shadow-lg">
               <Icon name="Save" size={20} className="mr-2" />
               Сохранить изменения
             </Button>
@@ -43,8 +43,8 @@ const Settings = () => {
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Icon name="Store" size={24} className="text-primary" />
+              <CardTitle className="flex items-center gap-2 font-poiret">
+                <Icon name="Store" size={24} className="text-purple-600" />
                 Основная информация
               </CardTitle>
               <CardDescription>
@@ -89,7 +89,7 @@ const Settings = () => {
                   id="currency"
                   value={currency}
                   onChange={(e) => setCurrency(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full px-3 py-2 border border-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 font-poiret"
                 >
                   <option value="RUB">Российский рубль (₽)</option>
                   <option value="USD">Доллар США ($)</option>
@@ -101,8 +101,8 @@ const Settings = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Icon name="Bell" size={24} className="text-primary" />
+              <CardTitle className="flex items-center gap-2 font-poiret">
+                <Icon name="Bell" size={24} className="text-pink-600" />
                 Уведомления
               </CardTitle>
               <CardDescription>
@@ -137,8 +137,8 @@ const Settings = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Icon name="Settings" size={24} className="text-primary" />
+              <CardTitle className="flex items-center gap-2 font-poiret">
+                <Icon name="Settings" size={24} className="text-orange-600" />
                 Системные настройки
               </CardTitle>
               <CardDescription>
