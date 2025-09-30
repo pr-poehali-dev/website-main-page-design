@@ -8,218 +8,259 @@ const Dashboard = () => {
   const [balance] = useState(42);
   const [ordersCount] = useState(1);
   const [commentsCount] = useState(0);
+  const [showStepsHelp, setShowStepsHelp] = useState(true);
+  const [currentStep, setCurrentStep] = useState(0);
 
   const menuItems = [
-    { title: 'Общие настройки', icon: 'Settings', description: 'Общие настройки сайта: смена пароля, перенос на отдельный домен', link: '/settings' },
-    { title: 'Товары', icon: 'Package', description: 'Управление товарами магазина. Добавление и редактирование', link: '/products' },
-    { title: 'Заказы', icon: 'ShoppingCart', description: 'Список заказов и их обработка', link: '/orders' },
-    { title: 'Модули сайта', icon: 'Layers', description: 'Подключение отдельных модулей - магазин, новости, статьи, формы', link: '/dashboard/modules' },
-    { title: 'Страницы сайта', icon: 'FileText', description: 'Управление страницами сайта. Добавление и редактирование', link: '/dashboard/pages' },
-    { title: 'Меню сайта', icon: 'Menu', description: 'Управление меню сайта. Создание меню и пунктов', link: '/dashboard/menu' },
-    { title: 'Файлы', icon: 'Folder', description: 'Загрузка файлов для скачивания - прайс-листы, документы', link: '/dashboard/files' },
-    { title: 'Резервные копии', icon: 'Database', description: 'Восстановление состояния сайта за предыдущие дни', link: '/dashboard/backups' },
-    { title: 'Тех. поддержка', icon: 'HelpCircle', description: 'Задайте вопрос технической поддержке', link: '/dashboard/support' },
-    { title: 'Варианты оформления', icon: 'Palette', description: 'Смена оформления сайта на встроенные варианты', link: '/dashboard/design' },
-    { title: 'Шаблоны', icon: 'Layout', description: 'Редактирование внешнего вида сайта', link: '/dashboard/templates' },
-    { title: 'Изображения', icon: 'Image', description: 'Загрузка изображений для дизайна и страниц', link: '/dashboard/images' },
-    { title: 'Пополнить счет', icon: 'CreditCard', description: 'Пополнение баланса магазина', link: '/dashboard/payment' },
-  ];
-
-  const quickStats = [
-    { label: 'Всего заказов', value: ordersCount, icon: 'ShoppingBag', color: 'text-primary' },
-    { label: 'Комментариев', value: commentsCount, icon: 'MessageSquare', color: 'text-primary-light' },
-    { label: 'На счету', value: `${balance} ₽`, icon: 'Wallet', color: 'text-primary-dark' },
+    { 
+      title: 'Общие настройки', 
+      icon: 'Settings', 
+      description: 'Общие настройки сайта: смена пароля, перенос на отдельный домен, настройки панели управления и т.д.',
+      link: '/settings',
+      image: '⚙️'
+    },
+    { 
+      title: 'Модули сайта', 
+      icon: 'Layers', 
+      description: 'Подключение отдельных модулей для сайта - интернет-магазин, лента новостей, каталог статей, форма обратной связи и т.д.',
+      link: '/dashboard/modules',
+      image: '🧩'
+    },
+    { 
+      title: 'Страницы сайта', 
+      icon: 'FileText', 
+      description: 'Управление страницами сайта. Здесь можно добавить новые страницы и отредактировать уже имеющиеся на сайте.',
+      link: '/dashboard/pages',
+      image: '📄'
+    },
+    { 
+      title: 'Меню сайта', 
+      icon: 'Menu', 
+      description: 'Управление меню сайта. Создание новых меню, управление пунктами меню, добавление в меню страниц и управление порядком их отображения.',
+      link: '/dashboard/menu',
+      image: '📋'
+    },
+    { 
+      title: 'Файлы', 
+      icon: 'Folder', 
+      description: 'В этом разделе на сайт можно загрузить файлы для скачивания - прайс-листы, архивы, документы и любые другие.',
+      link: '/dashboard/files',
+      image: '📁'
+    },
+    { 
+      title: 'Резервные копии', 
+      icon: 'Database', 
+      description: 'В этом разделе можно восстановить состояние сайта за несколько предыдущих дней. Сайт восстанавливается полностью вместе с настройками, страницами, товарами, заказами и т.д.',
+      link: '/dashboard/backups',
+      image: '💾'
+    },
+    { 
+      title: 'Тех. поддержка', 
+      icon: 'HelpCircle', 
+      description: 'Здесь вы можете задать вопрос технической поддержке. Для получения скорейшего ответа опишите проблему как можно более полно и точно.',
+      link: '/dashboard/support',
+      image: '❓'
+    },
+    { 
+      title: 'Варианты оформления', 
+      icon: 'Palette', 
+      description: 'Здесь можно целиком поменять оформление сайта на один из встроенных вариантов. Товары, заказы, страницы и другая информация при этом не теряются.',
+      link: '/dashboard/design',
+      image: '🎨'
+    },
+    { 
+      title: 'Шаблоны', 
+      icon: 'Layout', 
+      description: 'Здесь можно отредактировать внешний вид сайта. Редактировать можно либо при помощи визуального редактора, либо напрямую изменяя HTML-кода шаблона.',
+      link: '/dashboard/templates',
+      image: '🖼️'
+    },
+    { 
+      title: 'Изображения', 
+      icon: 'Image', 
+      description: 'Здесь можно загрузить на сайт изображения. Их можно использовать в качестве элементов дизайна или просто разместить на страницах сайта.',
+      link: '/dashboard/images',
+      image: '🖼️'
+    },
+    { 
+      title: 'Пополнить счет', 
+      icon: 'CreditCard', 
+      description: 'Здесь вы можете пополнить счет.',
+      link: '/dashboard/payment',
+      image: '💳'
+    },
   ];
 
   const setupSteps = [
-    { step: 1, title: 'Активация магазина', completed: false },
-    { step: 2, title: 'Выбор дизайна', completed: false },
-    { step: 3, title: 'Контактная информация', completed: false },
-    { step: 4, title: 'Наполнение каталога', completed: false },
+    { step: 1, title: 'Активация магазина. Прикрепление отдельного домена', completed: false },
+    { step: 2, title: 'Выбор и настройка дизайна', completed: false },
+    { step: 3, title: 'Указание контактной и справочной информации', completed: false },
+    { step: 4, title: 'Наполнение каталога товаров', completed: false },
     { step: 5, title: 'Привлечение покупателей', completed: false },
+    { step: 6, title: 'Обработка заказов', completed: false },
+    { step: 7, title: 'Отслеживание и анализ посещаемости', completed: false },
+    { step: 8, title: 'Поисковые системы и развитие сайта', completed: false },
+    { step: 9, title: 'Мобильное приложение и магазин в Telegram', completed: false },
+    { step: 10, title: 'Регистрация ИП и открытие расчетного счета', completed: false },
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral via-secondary to-primary-light">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-md border-b border-primary/10">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
+      <header className="bg-[#2c4161] text-white shadow-md sticky top-0 z-10">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-12">
             <div className="flex items-center space-x-4">
-              <a href="/" className="text-2xl font-poiret font-bold text-primary">
-                AllTrades
-              </a>
-              <span className="text-neutral-dark/60">|</span>
-              <span className="text-neutral-dark font-medium">Панель управления</span>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-white hover:bg-white/10 h-12 px-3"
+              >
+                <Icon name="Menu" size={20} />
+              </Button>
+              <div className="text-sm text-[#9bb3cd]">
+                {ordersCount > 0 ? (
+                  <span>
+                    <a href="/orders" className="text-white hover:underline">Новых заказов: {ordersCount}</a>
+                  </span>
+                ) : (
+                  <span>Новых заказов пока нет</span>
+                )}
+              </div>
             </div>
 
             <div className="flex items-center space-x-4">
-              <div className="hidden md:flex items-center space-x-6">
-                <div className="text-sm">
-                  <span className="text-neutral-dark/70">Магазин:</span>{' '}
-                  <a href="https://balooirk.ru" target="_blank" className="text-primary hover:text-primary-dark font-medium">
-                    balooirk.ru
-                  </a>
-                </div>
-                <div className="text-sm">
-                  <span className="text-neutral-dark/70">Баланс:</span>{' '}
-                  <span className="text-primary font-bold">{balance} ₽</span>
-                </div>
+              <div className="text-sm">
+                <span className="text-[#9bb3cd]">Магазин</span>{' '}
+                <a href="https://balooirk.ru" target="_blank" className="text-white hover:underline">
+                  balooirk.ru
+                </a>
               </div>
-              
-              <Button
-                variant="outline"
-                size="sm"
-                className="border-primary/20 text-neutral-dark hover:bg-primary-light"
-                onClick={() => window.location.href = '/'}
+              <div className="text-sm">
+                <span className="text-white">на счету: </span>
+                <a href="/dashboard/payment" className="text-[#3ABEE8] hover:underline">
+                  {balance} руб
+                </a>
+                <a 
+                  href="/dashboard/payment" 
+                  className="ml-2 px-2 py-1 bg-red-600 text-white text-xs hover:bg-red-700 rounded"
+                >
+                  пополнить
+                </a>
+              </div>
+              <button
+                onClick={() => setShowStepsHelp(!showStepsHelp)}
+                className="text-[#9bb3cd] hover:text-white text-sm"
               >
-                <Icon name="LogOut" size={16} className="mr-2" />
+                Инструкция
+              </button>
+              <a href="/" className="text-[#9bb3cd] hover:text-white text-sm">
                 Выход
-              </Button>
+              </a>
             </div>
           </div>
         </div>
       </header>
 
+      {/* Steps Progress Bar */}
+      {showStepsHelp && (
+        <div className="bg-white border-b border-gray-200 shadow-sm">
+          <div className="container mx-auto px-4 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4 flex-1">
+                <span className="text-sm font-semibold text-gray-700">
+                  Начало работы с магазином:
+                </span>
+                <div className="flex gap-2">
+                  {setupSteps.map((step) => (
+                    <button
+                      key={step.step}
+                      onClick={() => setCurrentStep(step.step)}
+                      className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all ${
+                        currentStep === step.step
+                          ? 'bg-blue-600 text-white ring-2 ring-blue-300'
+                          : step.completed
+                          ? 'bg-green-500 text-white'
+                          : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                      }`}
+                    >
+                      {step.completed ? '✓' : step.step}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <button
+                onClick={() => setShowStepsHelp(false)}
+                className="text-gray-400 hover:text-gray-600 ml-4"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Main Content */}
       <div className="container mx-auto px-4 py-8">
-        {/* Welcome Banner */}
-        <Card className="mb-8 border-primary/20 bg-gradient-primary text-white">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-3xl font-poiret font-bold mb-2 text-slate-800">Добро пожаловать в панель управления!</h1>
-                <p className="text-lg text-slate-800">
-                  Начните с настройки вашего магазина. Следуйте пошаговой инструкции ниже.
-                </p>
-              </div>
-              <Button
-                variant="outline"
-                size="lg"
-                className="bg-white text-primary hover:bg-white/90 border-0"
-                onClick={() => window.location.href = '/dashboard/payment'}
-              >
-                <Icon name="CreditCard" size={20} className="mr-2" />
-                Пополнить счет
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-800">Панель управления интернет-магазином</h1>
+        </div>
 
-        {/* Setup Progress */}
-        <Card className="mb-8 border-primary/20">
-          <CardHeader>
-            <CardTitle className="font-poiret text-2xl">Начало работы с магазином</CardTitle>
-            <CardDescription>Выполните эти шаги для полной настройки вашего интернет-магазина</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {setupSteps.map((item) => (
-                <div key={item.step} className="flex items-center space-x-4 p-4 rounded-lg bg-neutral/30 hover:bg-primary-light/20 transition-colors cursor-pointer">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${
-                    item.completed ? 'bg-primary text-white' : 'bg-white border-2 border-primary text-primary'
-                  }`}>
-                    {item.completed ? <Icon name="Check" size={20} /> : item.step}
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-medium text-neutral-dark">{item.title}</h3>
-                  </div>
-                  <Icon name="ChevronRight" size={20} className="text-neutral-dark/40" />
-                </div>
-              ))}
-            </div>
-            <div className="mt-6">
-              <div className="flex items-center justify-between mb-2 text-sm text-neutral-dark/70">
-                <span>Прогресс настройки</span>
-                <span>0 из {setupSteps.length}</span>
-              </div>
-              <Progress value={0} className="h-2" />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Quick Stats */}
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
-          {quickStats.map((stat, index) => (
-            <Card 
-              key={index} 
-              className="border-primary/20 hover:shadow-lg transition-all cursor-pointer"
-              onClick={() => index === 0 ? window.location.href = '/orders' : index === 1 ? window.location.href = '/dashboard/comments' : null}
+        {/* Menu Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {menuItems.map((item, index) => (
+            <Card
+              key={index}
+              className="hover:shadow-lg transition-shadow cursor-pointer border border-gray-200"
+              onClick={() => window.location.href = item.link}
             >
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-neutral-dark/70 mb-1">{stat.label}</p>
-                    <p className="text-3xl font-poiret font-bold text-neutral-dark">{stat.value}</p>
-                  </div>
-                  <div className={`w-14 h-14 bg-gradient-primary rounded-full flex items-center justify-center`}>
-                    <Icon name={stat.icon as any} size={28} className="text-white" />
+              <CardContent className="p-6 text-center">
+                <div className="mb-4 flex justify-center">
+                  <div className="w-24 h-24 flex items-center justify-center text-6xl">
+                    {item.image}
                   </div>
                 </div>
+                <h3 className="font-bold text-base mb-2 text-gray-800">{item.title}</h3>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  {item.description}
+                </p>
               </CardContent>
             </Card>
           ))}
         </div>
 
-        {/* Analytics Banner */}
-        <Card className="mb-8 border-primary/20 bg-gradient-to-r from-primary/10 to-secondary/20 hover:shadow-lg transition-all cursor-pointer" onClick={() => window.location.href = '/analytics'}>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-gradient-primary rounded-xl flex items-center justify-center">
-                  <Icon name="BarChart3" size={32} className="text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-neutral-dark mb-1">Аналитика и отчеты</h3>
-                  <p className="text-sm text-neutral-dark/70">Детальная статистика продаж, графики и ключевые метрики</p>
-                </div>
-              </div>
-              <Icon name="ArrowRight" size={24} className="text-primary" />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Main Menu Grid */}
-        <div>
-          <h2 className="text-2xl font-poiret font-bold text-neutral-dark mb-6">Управление магазином</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {menuItems.map((item, index) => (
-              <Card
-                key={index}
-                className="border-primary/20 hover:border-primary hover:shadow-xl transition-all cursor-pointer hover-scale group"
-                onClick={() => window.location.href = item.link}
-              >
-                <CardHeader>
-                  <div className="w-16 h-16 bg-gradient-primary rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                    <Icon name={item.icon as any} size={32} className="text-white" />
-                  </div>
-                  <CardTitle className="font-poiret text-xl">{item.title}</CardTitle>
-                  <CardDescription className="text-sm leading-relaxed">
-                    {item.description}
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-            ))}
-          </div>
-        </div>
-
-        {/* Footer Info */}
-        <Card className="mt-8 border-primary/20 bg-white/50">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Icon name="Lock" size={20} className="text-primary" />
-                <span className="text-sm text-neutral-dark/70">Защищено SSL</span>
-              </div>
-              <div className="flex items-center space-x-4">
-                <a href="/dashboard/help" className="text-sm text-primary hover:text-primary-dark transition-colors">
-                  Справка
-                </a>
-                <a href="/dashboard/support" className="text-sm text-primary hover:text-primary-dark transition-colors">
-                  Техподдержка
-                </a>
-              </div>
-            </div>
+        {/* Sidebar Info */}
+        <Card className="mt-8 border border-gray-200 bg-white">
+          <CardHeader>
+            <CardTitle className="text-lg">Информация</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2 text-sm">
+            <p>
+              <a href="/orders" className="text-blue-600 hover:underline">
+                Всего заказов: <strong>{ordersCount}</strong>
+              </a>
+            </p>
+            <p>
+              <a href="/dashboard/comments" className="text-blue-600 hover:underline">
+                Комментариев: <strong>{commentsCount}</strong>
+              </a>
+            </p>
+            <p>На счету: <strong>{balance} руб</strong></p>
+            <p className="text-red-600 font-bold">
+              Тариф: 2100 руб/мес
+            </p>
+            <p className="text-red-600">Необходимо пополнить счет</p>
+            <p>
+              <a href="/dashboard/payment" className="text-[#26A69A] hover:underline">
+                Пополнить счет
+              </a>
+            </p>
+            <p className="pt-4">
+              <span className="text-green-600 flex items-center gap-2">
+                <Icon name="Lock" size={16} />
+                Защищено SSL
+              </span>
+            </p>
           </CardContent>
         </Card>
       </div>
