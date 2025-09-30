@@ -12,6 +12,12 @@ import Orders from "./pages/Orders";
 import Settings from "./pages/Settings";
 import GeneralSettings from "./pages/GeneralSettings";
 import Administrators from "./pages/Administrators";
+import SmsNotifications from "./pages/SmsNotifications";
+import TelegramNotifications from "./pages/TelegramNotifications";
+import EmailNotifications from "./pages/EmailNotifications";
+import EmailSenders from "./pages/EmailSenders";
+import DataCopy from "./pages/DataCopy";
+import Backups from "./pages/Backups";
 import Analytics from "./pages/Analytics";
 import NotFound from "./pages/NotFound";
 
@@ -32,6 +38,12 @@ const App = () => (
           <Route path="/settings" element={<Settings />} />
           <Route path="/general-settings" element={<GeneralSettings />} />
           <Route path="/administrators" element={<Administrators />} />
+          <Route path="/sms-notifications" element={<SmsNotifications />} />
+          <Route path="/telegram-notifications" element={<TelegramNotifications />} />
+          <Route path="/email-notifications" element={<EmailNotifications />} />
+          <Route path="/email-senders" element={<EmailSenders />} />
+          <Route path="/data-copy" element={<DataCopy />} />
+          <Route path="/backups" element={<Backups />} />
           <Route path="/analytics" element={<Analytics />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
